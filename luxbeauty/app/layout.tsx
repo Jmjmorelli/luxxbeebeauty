@@ -1,12 +1,36 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter} from "next/font/google";
+import { Geist, Geist_Mono, Inter, Instrument_Serif, Shadows_Into_Light, Lobster_Two} from "next/font/google";
 import "./globals.css";
-
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
+
+const lobster = Lobster_Two({
+  subsets: ["latin"],
+  weight: ["400"],          
+  variable: "--font-lobster",
+  display: "swap",
+})
+
+
+const instrument = Instrument_Serif({
+  weight: '400',
+  variable: '--font-instrument-serif', // Optional: for use with CSS variables or Tailwind CSS
+  subsets: ['latin'],
+  display: 'swap', // Optional: 'swap' ensures text is visible while the font is loading
+});
+
+const shadows = Shadows_Into_Light({
+  weight: '400',
+  variable: '--font-shadow-serif', // Optional: for use with CSS variables or Tailwind CSS
+  subsets: ['latin'],
+  display: 'swap', // Optional: 'swap' ensures text is visible while the font is loading
+
+
+})
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <body
-        className={`${inter.variable} antialiased`}
+        className={`${instrument.variable} ${lobster.variable} ${shadows.variable}  antialiased`}
       >       
         {children}
       </body>

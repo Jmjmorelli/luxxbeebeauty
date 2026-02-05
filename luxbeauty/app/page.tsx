@@ -3,9 +3,9 @@ import Logo from "./images/luxLogo.jpeg";
 import Link from 'next/link';
 import styles from "./page.module.css"
 import BottomSheetNav from "./components/BottomSheetNav"
-import { Geist, Geist_Mono, Inter, Instrument_Serif, Shadows_Into_Light} from "next/font/google";
+import { Geist, Geist_Mono, Inter, Instrument_Serif, Shadows_Into_Light } from "next/font/google";
 
-	
+
 
 export default function Home() {
 	return (
@@ -17,7 +17,7 @@ export default function Home() {
 							<div className="brand header-brand">
 								<h1 className="m-0">
 									<a href="#">
-										<Image className="header-logo-image" src={Logo} alt="Logo" width={100} height={100} />
+										{/* <Image className="header-logo-image" src={Logo} alt="Logo" width={100} height={100} /> */}
 									</a>
 								</h1>
 							</div>
@@ -34,7 +34,8 @@ export default function Home() {
 						<div className="container-sm">
 							<div className="hero-inner">
 								<div className="hero-copy">
-											<h1 className="hero-title mt-0 brand"> LuxxBeeBeauty</h1>
+									{/* <h1 className="hero-title mt-0 brand"> LuxxBeeBeauty</h1> */}
+									<h1 className="hero-title mt-0 brand"> Testing</h1>
 									<p className="hero-paragraph"> Looking for a cosmetic upgrade? Browse below for amazing services.</p>
 									<div className="hero-cta">
 										<Link className="button button-primary button-wide-mobile" href="/bookings">BOOK APPOINTMENT NOW</Link>
@@ -120,7 +121,7 @@ export default function Home() {
 										<h2 className="section-title mt-0">Stay in the know</h2>
 										<p className="section-paragraph">Lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation.</p>
 										<div className="cta-cta">
-											<a className="button button-primary button-wide-mobile" href="#">Get early access</a>
+											<a className="button button-primary button-wide-mobile" href="#">Subscribe</a>
 										</div>
 									</div>
 								</div>
@@ -132,7 +133,7 @@ export default function Home() {
 							<div className="site-footer-inner">
 								<div className="brand footer-brand">
 									<a href="#">
-										<Image src={Logo} width={50} alt="Logo" />
+										{/* <Image src={Logo} width={50} alt="Logo" /> */}
 									</a>
 								</div>
 								<ul className="footer-links list-reset">
@@ -182,7 +183,7 @@ export default function Home() {
 				</footer>
 			</div>
 
-			      <BottomSheetNav />
+			<BottomSheetNav />
 		</div>
 	);
 }

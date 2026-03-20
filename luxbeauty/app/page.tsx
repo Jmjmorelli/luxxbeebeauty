@@ -40,7 +40,7 @@ export default function Home() {
 									{/* <h1 className="hero-title mt-0 brand"> Testing</h1> */}
 									<p className="hero-paragraph"> Looking for a cosmetic upgrade? Browse below for amazing services.</p>
 									<div className="hero-cta">
-										<Link className="button button-primary button-wide-mobile" href="/bookings">BOOK APPOINTMENT NOW</Link>
+										<Link className="button button-primary button-wide-mobile" href="/services">BOOK APPOINTMENT NOW</Link>
 									</div>
 						</div>
 					</section>

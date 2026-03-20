@@ -8,29 +8,60 @@ import fullSet1 from "../images/fullSet1.jpeg"
 import styles from "./page.module.css"
 
 import { useState } from "react";
+import { useCart } from "../context/cardContext";
 
+
+const services = [
+  {
+
+    category: "Lashes",
+    items: [
+      { id: "full-set", name: "Full Set", price: 85 },
+      { id: "fill", name: "Fill", price: 65 },
+      { id: "lash-lift", name: "Lash Lift", price: 40 },
+      { id: "lash-tint", name: "Lash Tint", price: 15 },
+    ]
+  },
+  {
+    category: "Brows",
+    items: [
+      { id: "brow-wax", name: "Eyebrow Waxing", price: 20 },
+      { id: "brow-razor", name: "Eyebrow Razor Clean Up", price: 10 },
+      { id: "brow-tint", name: "Eyebrow Tint", price: 15 },
+      { id: "brow-mapping", name: "Eyebrow Mapping", price: 15 },
+    ]
+  },
+  {
+    category: "Waxing",
+    items: [
+      { id: "underarms", name: "Underarms", price: 30 },
+      { id: "legs", name: "Legs", price: 60 },
+    ]
+  },
+  {
+    category: "Hair",
+    items: [
+      { id: "starter-locs", name: "Starter Locs", price: 150 },
+      { id: "retwist", name: "Retwist + Style", price: 150 }, // 130 + 20
+      { id: "flat-iron", name: "Flat Iron", price: 80 },
+      { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30 },
+    ]
+  }
+];
 
 export default function Services() {
 
-  const [cart, setCart] = useState<CartItem[]>([]);
 
-  type CartItem = {
-    name: string;
-    price: number;
-  };
+  const { cart } = useCart();
+  const { addToCart } = useCart();
+  const { removeFromCart } = useCart();
+  const { clearCart } = useCart();
 
-  const addToCart = (item: CartItem) => {
-    const updatedCart = [...cart, item];
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    console.log(updatedCart);
-  };
 
-  // addToCart({});
+
 
   return (
     <div className="body-wrap boxed-container">
-      {/* <TopBarNav /> */}
       <main>
 
 
@@ -61,234 +92,53 @@ export default function Services() {
 
         <div className={styles.appointmentPage}>
 
+          {services.map((category) => (
+            <div key={category.category}>
+              <h2>{category.category}</h2>
 
-          <p className={styles.servicesPage}>Lash Extensions</p>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={fullSet1} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <div className={styles.textContent}>
+              {category.items.map((item) => {
+                const exists = cart.some((cartItem) => cartItem.id === item.id);
 
-                <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-                >Full Set - $85</a>
-                <a className={styles.heroParagraphServices}
-                >Synthetic lashes for a voluminous look</a>
-              </div>
-              <button
-                onClick={() => addToCart({
-                  name: "Full Set",
-                  price: 85,
-                })}
-                className={styles.addBtn}>Add to cart</button>
+                return (
+                  <div key={item.id} className={styles.servicesContainer}>
+                    <div>
+                      <div className={styles.textContent}>
+                        <p
+                          style={{ fontWeight: "bold" }}
+                          className={styles.heroParagraphServices}
+                        >
+                          {item.name} - ${item.price}
+                        </p>
+
+                        <p className={styles.heroParagraphServices}>
+                          Service description here
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          exists ? removeFromCart(item.id) : addToCart(item)
+                        }
+                        className= { exists ? styles.removeBtn : styles.addBtn}
+                      >
+                        {exists ? "Remove Service" : "Add Service"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Lash Lift - $40</a>
-              <a className={styles.heroParagraphServices}
-              >Curls and lifts your natural eyelashes</a>
-              <button
-                onClick={() => addToCart({
-                  name: "Lash Lift",
-                  price: 40,
-                })}
-
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Fill - $65</a>
-              <a className={styles.heroParagraphServices}
-              >Maintenance refill</a>
-              <button
-                onClick={() => addToCart({
-                  name: "Fill",
-                  price: 65,
-                })}
-
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Lash Tint - $15</a>
-              <a className={styles.heroParagraphServices}
-              >Long lasting mascara (3 weeks)</a>
-              <button
-                onClick={() => addToCart({
-                  name: "Lash Tint",
-                  price: 15,
-                })}
-
-                className={styles.addBtn}>Add to cart</button>
-            </div>
+          ))}
+          <div>
+            Break
           </div>
 
-          <p className={styles.servicesPage}>Eyebrows</p>
 
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Eyebrow Waxing - $20</a>
-              <a className={styles.heroParagraphServices}
-              >Remove unwanted hair from the root around the brow area</a>
-              <button
-                onClick={() => addToCart({
-                  name: "Eyebrow Waxing",
-                  price: 20,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Eyebrow (Razor) clean up - $10</a>
-              <a className={styles.heroParagraphServices}
-              >Maintain brow shape</a>
-              <button
-                onClick={() => addToCart({
-                  name: "Eyebrow clean up",
-                  price: 10,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Eyebrow tint - $15</a>
-              <a className={styles.heroParagraphServices}
-              ></a>
-              <button
-                onClick={() => addToCart({
-                  name: "Eyebrow tint",
-                  price: 15,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Eyebrow mapping - $15</a>
-              <a className={styles.heroParagraphServices}
-              ></a>
-              <button
-                onClick={() => addToCart({
-                  name: "Eyebrow mapping",
-                  price: 15,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
 
-          <p className={styles.servicesPage}>Waxing </p>
+          <button className={styles.addBtn} onClick={() =>
+            clearCart()
+          }></button>
 
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Underarms - $30</a>
-              <a className={styles.heroParagraphServices}
-              ></a>
-              <button
-                onClick={() => addToCart({
-                  name: "Underarms",
-                  price: 30,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Legs - $60</a>
-              <a className={styles.heroParagraphServices}
-              ></a>
-              <button
-                onClick={() => addToCart({
-                  name: "Legs",
-                  price: 60,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-
-          <p className={styles.servicesPage}>Hair</p>
-
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Starter Locs - $150</a>
-              <a className={styles.heroParagraphServices}
-              >Section hair | Comb Coils or Box Braids</a>
-              <button
-                onClick={() => addToCart({
-                  name: "Starter Locs",
-                  price: 150,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Retwist - $130 Style + $20</a>
-              <a className={styles.heroParagraphServices}
-              ></a>
-              <button
-                onClick={() => addToCart({
-                  name: "Retwist",
-                  price: 150,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Flat Iron - $80</a>
-              <a className={styles.heroParagraphServices}
-              ></a>
-              <button
-                onClick={() => addToCart({
-                  name: "Flat Iron",
-                  price: 80,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
-          <div className={styles.servicesContainer}>
-            {/* <Image src={lashlift2} className="apptIcon" alt="apptLogo" /> */}
-            <div>
-              <a style={{ fontWeight: "bold" }} className={styles.heroParagraphServices}
-              >Shampoo and Blow Dry - $30</a>
-              <a className={styles.heroParagraphServices}
-              ></a>
-              <button
-                onClick={() => addToCart({
-                  name: "Shampoo and Blow Dry",
-                  price: 30,
-                })}
-                className={styles.addBtn}>Add to cart</button>
-            </div>
-          </div>
 
 
         </div>

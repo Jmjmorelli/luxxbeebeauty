@@ -1,3 +1,177 @@
 .testing {
     font-size: 500px;
 }
+
+.appointmentPage {
+    padding-left: 5rem;
+    margin-bottom: 5rem;
+}
+
+.servicesPage {
+    /* padding: 2rem; */
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    display: flex;
+    /* justify-content: right; */
+    align-items: center;
+    padding-top: 30px;
+    /* padding-bottom: 30px; */
+}
+
+
+.heroParagraphServices {
+    /* border: solid 2px black; */
+    /* /* border: solid 2px black; */
+    pointer-events: none;
+    display: flex;
+    color: #3c2a1e;
+    padding-right: 72px
+}
+
+.servicesContainer {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border: #000;
+    border-top: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+
+}
+
+.textContent {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.addBtn {
+    align-self: flex-end;
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    height: 36px;
+    line-height: 34px;
+    font-size: 14px;
+    color: #241c15;
+    background-color: #efeeea;
+    transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+    padding: 0 18px;
+
+    :hover {
+        color: #241c15;
+        background-color: #d9d7cd;
+    }
+}
+
+
+.card {
+    position: absolute;
+    top: 2rem;
+    right: 20%;
+    padding: 20px;
+    width: 330px;
+    min-height: 370px;
+    border-radius: 20px;
+    background: #e8e8e8;
+    box-shadow: 5px 5px 6px #dadada,
+        -5px -5px 6px #f6f6f6;
+    transition: 0.4s;
+}
+
+@media (max-width: 768px) {
+    .card {
+        position: relative;
+        top: 0;
+        right: auto;
+        left: auto;
+        margin: 1rem auto;
+        /* centers it */
+        width: 90%;
+        max-width: 330px;
+    }
+}
+
+
+.cardTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2e54a7;
+    margin: 15px 0 0 10px;
+}
+
+.cardImage {
+    min-height: 170px;
+    background-color: #c9c9c9;
+    border-radius: 15px;
+    box-shadow: inset 8px 8px 10px #c3c3c3,
+        inset -8px -8px 10px #cfcfcf;
+}
+
+.cardBody {
+    margin: 13px 0 0 10px;
+    color: rgb(31, 31, 31);
+    font-size: 18px;
+}
+
+.footer {
+    float: right;
+    margin: 28px 0 0 18px;
+    font-size: 13px;
+    color: #636363;
+}
+
+.byNzame {
+    font-weight: 700;
+}
+
+.socialIcons {
+    /* margin-left: .25rem; */
+}
+
+.socials {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    /* padding-right: 1rem; */
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    /* gap: ; */
+
+}
+
+@media (max-width: 768px) {
+
+    .servicesPage {
+        justify-content: center;
+        width: 100%;
+    }
+
+
+    .servicesContainer {
+        display: flex;
+        justify-content: left;
+        text-align: left;
+        width: 100%;
+    }
+
+    .heroParagraphServices {
+        text-align: left;
+    }
+
+    .appointmentPage {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 5rem;
+    }
+}

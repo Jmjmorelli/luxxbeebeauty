@@ -9,9 +9,9 @@ type NavItem = { label: string; href: string }
 
 const items: NavItem[] = [
     { label: "Services", href: "/services" },
-    { label: "Schedule", href: "#schedule" },
-    { label: "Contact Me", href: "#contact" },
-    { label: "About Me", href: "#about" },
+    { label: "Book", href: "/book" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
 ]
 
 export default function BottomSheetNav() {
@@ -61,10 +61,11 @@ export default function BottomSheetNav() {
                 <div className="sheetContent">
                     <h3 className="sheetTitle"></h3>
                     <nav className="sheetNav">
-                        <Link className="sheetItem" href="/services">Bookings</Link>
+                        <Link className="sheetItem" href="/ ">Home</Link>
                         <Link className="sheetItem" href="/services">Services</Link>
-                        <Link className="sheetItem" href="/services">About</Link>
-                        <Link className="sheetItem" href="/services">Contact </Link>
+                        <Link className="sheetItem" href="/book">Book</Link>
+                        <Link className="sheetItem" href="/about">About</Link>
+                        <Link className="sheetItem" href="/contact`">Contact </Link>
                     </nav>
                 </div>
             </div>

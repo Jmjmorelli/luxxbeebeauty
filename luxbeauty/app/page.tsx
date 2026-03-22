@@ -36,7 +36,7 @@ export default function Home() {
 				<main>
 					<section className="hero text-center text-light">
 								<div className="hero-copy">
-									<h1 className="hero-title mt-0 brand"> LuxxBeeBeauty</h1>
+									<h1 className="hero-title mt-0 brand" style={{paddingBottom: "1rem"}}> LuxxBeeBeauty</h1>
 									{/* <h1 className="hero-title mt-0 brand"> Testing</h1> */}
 									<p className="hero-paragraph"> Looking for a cosmetic upgrade? Browse below for amazing services.</p>
 									<div className="hero-cta">

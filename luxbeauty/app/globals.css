@@ -1318,7 +1318,7 @@ label {
 
 .hero {
   position: relative;
-  padding-top: 128px;
+  padding-top: 100px;
   padding-bottom: 8px;
   z-index: 0;
   font-weight: bold;
@@ -2080,7 +2080,7 @@ main {
 }
 
 img {
-  width: 100%;
+  width: 69%;
   object-fit: cover;
   transform: scale(1);
 

@@ -16,38 +16,41 @@ const services = [
 
     category: "Lashes",
     items: [
-      { id: "full-set", name: "Full Set", price: 85 },
-      { id: "fill", name: "Fill", price: 65 },
-      { id: "lash-lift", name: "Lash Lift", price: 40 },
-      { id: "lash-tint", name: "Lash Tint", price: 15 },
+      { id: "full-set", name: "Full Set", price: 85, description: "Complete lash extensions application" },
+      { id: "fill", name: "Fill", price: 65, description: "Refill and refresh existing lashes" },
+      { id: "lash-lift", name: "Lash Lift", price: 40, description: "Natural lash curl enhancement" },
+      { id: "lash-tint", name: "Lash Tint", price: 15, description: "Darkens lashes for fuller look" },
     ]
   },
   {
     category: "Brows",
     items: [
-      { id: "brow-wax", name: "Eyebrow Waxing", price: 20 },
-      { id: "brow-razor", name: "Eyebrow Razor Clean Up", price: 10 },
-      { id: "brow-tint", name: "Eyebrow Tint", price: 15 },
-      { id: "brow-mapping", name: "Eyebrow Mapping", price: 15 },
+      { id: "brow-wax", name: "Eyebrow Waxing", price: 20, description: "Shapes and cleans brow area" },
+      { id: "brow-razor", name: "Eyebrow Razor Clean Up", price: 10, description: "Quick brow touch-up cleanup" },
+      { id: "brow-tint", name: "Eyebrow Tint", price: 15, description: "Darkens brows for fuller look" },
+      { id: "brow-mapping", name: "Eyebrow Mapping", price: 15, description: "Precision brow shaping guide" },
+
     ]
   },
   {
     category: "Waxing",
     items: [
-      { id: "underarms", name: "Underarms", price: 30 },
-      { id: "legs", name: "Legs", price: 60 },
+      { id: "underarms", name: "Underarms", price: 30, description: "Removes underarm hair smoothly" },
+      { id: "legs", name: "Legs", price: 60, description: "Full leg hair removal service" },
     ]
   },
   {
     category: "Hair",
     items: [
-      { id: "starter-locs", name: "Starter Locs", price: 150 },
-      { id: "retwist", name: "Retwist + Style", price: 150 }, // 130 + 20
-      { id: "flat-iron", name: "Flat Iron", price: 80 },
-      { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30 },
-    ]
+      { id: "starter-locs", name: "Starter Locs", price: 150, description: "Begin your loc journey" },
+      { id: "retwist", name: "Retwist + Style", price: 150, description: "Maintain and style existing locs" },
+      { id: "flat-iron", name: "Flat Iron", price: 80, description: "Smooth and straighten hair finish" },
+      { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30, description: "Cleanse and styled blowout" },]
   }
 ];
+
+
+
 
 export default function Services() {
 
@@ -58,6 +61,7 @@ export default function Services() {
   const { clearCart } = useCart();
 
 
+  const exists = cart.length > 0;
 
 
   return (
@@ -111,7 +115,7 @@ export default function Services() {
                         </p>
 
                         <p className={styles.heroParagraphServices}>
-                          Service description here
+                          {item.description}
                         </p>
                       </div>
 
@@ -119,7 +123,7 @@ export default function Services() {
                         onClick={() =>
                           exists ? removeFromCart(item.id) : addToCart(item)
                         }
-                        className= { exists ? styles.removeBtn : styles.addBtn}
+                        className={exists ? styles.removeBtn : styles.addBtn}
                       >
                         {exists ? "Remove Service" : "Add Service"}
                       </button>
@@ -128,18 +132,26 @@ export default function Services() {
                 );
               })}
             </div>
+
           ))}
-          <div>
-            Break
+
+
+
+          {exists ? <button style={{ marginTop: "1rem" }} className={styles.btn} onClick={() =>
+            clearCart()
+          }
+          >
+            Clear cart
+          </button>
+            : <h5 style={{ marginTop: "1rem" }}>Cart is empty</h5>}
+
+          <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+            *Please see my policies if this is your first time booking! Thank you!
           </div>
 
-
-
-          <button className={styles.addBtn} onClick={() =>
-            clearCart()
-          }></button>
-
-
+          <div className={styles.bookBtn}>
+            <button style={{ display: "flex", justifyContent: "center", width: "100%", borderRadius: "50px" }} className={styles.btn}>Book</button>
+          </div>
 
         </div>
       </main>

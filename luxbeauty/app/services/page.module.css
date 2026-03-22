@@ -47,6 +47,28 @@
 
 }
 
+.btn {
+    align-self: flex-end;
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    height: 36px;
+    line-height: 34px;
+    font-size: 14px;
+    color: black;
+    background-color: #efeeea;
+    transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+    padding: 0 18px;
+
+    :hover {
+        color: #241c15;
+        background-color: #d9d7cd;
+    }
+}
+
 .addBtn {
     align-self: flex-end;
     display: inline-block;
@@ -203,4 +225,16 @@
 .buttonGroup {
     display: flex;
     gap: 1rem;
+}
+
+
+.bookBtn {
+    padding-right: 3rem;
+}
+
+@media (max-width: 768px) {
+
+    .bookBtn {
+        padding-right: 0;
+    }
 }

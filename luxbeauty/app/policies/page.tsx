@@ -1,7 +1,23 @@
 import BottomSheetNav from "../components/BottomSheetNav"
-
+import { db } from "../db"
+import { appointmentsTable } from "../db/schema"
 
 export default function Policies() {
+
+  async function createAppointment() {
+  'use server'
+
+  await db.insert(appointmentsTable).values({
+    id: crypto.randomUUID(), // ⚠️ also fix this
+    customer_name: "test",
+    customer_phone: "1234567890",
+    customer_email: "test@gmail.com",
+    service_names: "test service",
+    start_at: Date.now(),
+    end_at: Date.now() + 3600000,
+  });
+}
+
   return (
     <div >
       <div style={{padding: "1rem"}}>
@@ -25,6 +41,12 @@ export default function Policies() {
       <div style={{padding: "1rem"}}>
         Any appt not listed on my schedule is a squeeze in,  $40 fee
       </div>
+
+      <form>
+        <button formAction={createAppointment}>submit</button>
+      </form>
+
+
 
 
 

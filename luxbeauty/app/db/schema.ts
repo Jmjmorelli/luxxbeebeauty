@@ -10,6 +10,8 @@ export const appointmentsTable = sqliteTable('appointments', {
     start_at: integer('start_at').notNull(),
     end_at: integer('end_at').notNull(),
     status: text('status').notNull().default('confirmed'),
+    appointment_notes: text('appointment_notes'),
+    customer_notes: text('customer_notes'),
     created_at: integer('created_at').default(sql`(strftime('%s', 'now') * 1000)`).notNull(),
 });
 

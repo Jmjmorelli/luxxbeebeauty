@@ -12,5 +12,5 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - App/DB tracks all appointments with client information, services, and prices.
 
 - Im using Turso as the database and Drizzle ORM as the ORM, with the libSQL driver/client underneath.
-[text](https://orm.drizzle.team/docs/tutorials/drizzle-with-turso)
+[here!!](https://orm.drizzle.team/docs/tutorials/drizzle-with-turso)
 

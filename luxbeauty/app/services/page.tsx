@@ -10,13 +10,22 @@ import styles from "./page.module.css"
 import { useState } from "react";
 import { useCart } from "../context/cardContext";
 
+import Link from 'next/link';
+
+
 
 const services = [
   {
 
     category: "Lashes",
     items: [
-      { id: "full-set", name: "Full Set", price: 85, description: "Complete lash extensions application" },
+      { id: "wet-set", name: "Wet Set", price: 85, description: "TBD" },
+      { id: "hybrid-set", name: "Hybrid Set", price: 85, description: "TBD" },
+      { id: "light-volume-set", name: "Light Volume Set", price: 85, description: "TBD" },
+      { id: "volume-set", name: "Volume Set", price: 85, description: "TBD" },
+      { id: "mega-volume-set", name: "Mega Volume Set", price: 85, description: "TBD" },
+      { id: "wispy-volume-set", name: "Wispy Volume Set", price: 85, description: "TBD" },
+      { id: "full-set", name: "Full Set", price: 85, description: "TBD" },
       { id: "fill", name: "Fill", price: 65, description: "Refill and refresh existing lashes" },
       { id: "lash-lift", name: "Lash Lift", price: 40, description: "Natural lash curl enhancement" },
       { id: "lash-tint", name: "Lash Tint", price: 15, description: "Darkens lashes for fuller look" },
@@ -150,7 +159,9 @@ export default function Services() {
           </div>
 
           <div className={styles.bookBtn}>
-            <button style={{ display: "flex", justifyContent: "center", width: "100%", borderRadius: "50px" }} className={styles.btn}>Book</button>
+            <button style={{ display: "flex", justifyContent: "center", width: "100%", borderRadius: "50px" }} className={styles.btn}><Link  href="/services/book">Book Now</Link></button>
+            
+
           </div>
 
         </div>

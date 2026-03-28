@@ -45,26 +45,26 @@ export default function Home() {
 						</div>
 					</section>
 					<div className="mockup-container">
-						<p className="services">Lashes</p>
+						<p className="services">Gallery</p>
 					</div>
 
 					<section className="gallery">
 						<div className="container">
 							<div className="grid">
 
-								<div className="column-xs-12 column-md-4" style={{ width: '33%' }}>
+								<div className="column-xs-12 column-md-4" style={{ width: '50%'  }}>
 									<figure className="img-container">
-										<Image src={Eyelash1} alt="Logo" />
+										<Image src={Eyelash3}  style={{ objectPosition: "center 45%" }} alt="Logo" />
 									</figure>
 								</div>
-								<div className="column-xs-12 column-md-6" style={{ width: '33%' }}>
+								<div className="column-xs-12 column-md-6" style={{ width: '50%' }}>
 									<figure className="img-container">
 										<Image style={{ objectPosition: "center 35%" }} src={Eyelash6} alt="Logo" />
 									</figure>
 								</div>
-								<div className="column-xs-12 column-md-6" style={{ width: '33%' }}>
+								<div className="column-xs-12 column-md-6" style={{ width: '100%' }}>
 									<figure className="img-container">
-										<Image style={{ objectPosition: "center 60%" }} src={Eyelash3} alt="Logo" />
+										<Image style={{ objectPosition: "center 65%" }} src={Eyelash1} alt="Logo" />
 									</figure>
 								</div>
 								<div style={{ width: '50%' }}>
@@ -89,7 +89,7 @@ export default function Home() {
 
 
 					<div className="mockup-container">
-						<p className="services">Eyebrows</p>
+						{/* <p className="services">Eyebrows</p> */}
 					</div>
 
 					<section className="gallery">

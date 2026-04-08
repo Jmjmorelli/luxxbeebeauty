@@ -1,0 +1,302 @@
+@media (max-width: 768px) {
+
+    .card {
+        margin: 1.5rem;
+        width: auto;
+        height: auto;
+        border-radius: 15px;
+        background: #fafafa;
+        box-shadow: 15px 15px 30px #bebebe,
+            -15px -15px 30px #ffffff;
+        justify-content: center;
+    }
+
+    .buttonBook {
+        width: fit-content;
+        min-width: 100px;
+        height: 45px;
+        padding: 8px;
+        border-radius: 5px;
+        border: 2.5px solid #E0E1E4;
+        box-shadow: 0px 0px 20px -20px;
+        cursor: pointer;
+        background-color: white;
+        transition: all 0.2s ease-in-out 0ms;
+        user-select: none;
+        /* font-family: 'Poppins', sans-serif; */
+    }
+
+    .buttonBook:hover {
+        background-color: #F2F2F2;
+        box-shadow: 0px 0px 20px -18px;
+    }
+
+    .buttonBook:active {
+        transform: scale(0.95);
+    }
+
+    .btn {
+        align-self: flex-end;
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        font-weight: 500;
+        border: 1px solid transparent;
+        border-radius: 2px;
+        height: 36px;
+        line-height: 34px;
+        font-size: 14px;
+        color: black;
+        background-color: #efeeea;
+        transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+        padding: 0 18px;
+
+        :hover {
+            color: #241c15;
+            background-color: #d9d7cd;
+        }
+    }
+
+    .bookBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .timeGrid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        max-width: 300px;
+        width: 100%;
+        margin: auto;
+    }
+
+    .timeBtn {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .timeBtn:hover {
+        background: #f3f3f3;
+        border-color: #999;
+    }
+
+    .timeBtn.active {
+        background: #000;
+        color: white;
+        border-color: #000;
+    }
+
+    .dateRow {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding: 8px 4px 12px 4px;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .dateRow::-webkit-scrollbar {
+        display: none;
+    }
+
+    .dateBtn {
+        flex: 0 0 auto;
+        min-width: 90px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
+        scroll-snap-align: start;
+    }
+
+    .dateBtn:hover {
+        background: #f3f3f3;
+        border-color: #999;
+    }
+
+    .dateBtn.active {
+        background: #000;
+        color: white;
+        border-color: #000;
+    }
+
+}
+
+@media (min-width: 768px) {
+
+    .bookingWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* centers everything horizontally */
+    }
+
+    .bookingWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .timeGrid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        max-width: 300px;
+        width: 100%;
+        justify-content: center;
+        margin: auto;
+    }
+
+    .dateRow {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding: 8px 4px 12px 4px;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+
+        justify-content: center;
+        /* 👈 centers when NOT overflowing */
+    }
+
+    .dateRow {
+        margin-bottom: 1rem;
+    }
+
+    .buttonBook {
+        width: fit-content;
+        min-width: 100px;
+        height: 45px;
+        padding: 8px;
+        border-radius: 5px;
+        border: 2.5px solid #E0E1E4;
+        box-shadow: 0px 0px 20px -20px;
+        cursor: pointer;
+        background-color: white;
+        transition: all 0.2s ease-in-out 0ms;
+        user-select: none;
+        /* font-family: 'Poppins', sans-serif; */
+    }
+
+    .buttonBook:hover {
+        background-color: #F2F2F2;
+        box-shadow: 0px 0px 20px -18px;
+    }
+
+    .buttonBook:active {
+        transform: scale(0.95);
+    }
+
+
+    .btn {
+        align-self: flex-end;
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        font-weight: 500;
+        border: 1px solid transparent;
+        border-radius: 2px;
+        height: 36px;
+        line-height: 34px;
+        font-size: 14px;
+        color: black;
+        background-color: #efeeea;
+        transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+        padding: 0 18px;
+
+        :hover {
+            color: #241c15;
+            background-color: #d9d7cd;
+        }
+    }
+
+    .bookBtn {
+        padding-right: 3rem;
+    }
+
+    .dateBtn {
+        flex: 0 0 auto;
+        min-width: 90px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
+        scroll-snap-align: start;
+    }
+
+    .dateBtn:hover {
+        background: #f3f3f3;
+        border-color: #999;
+    }
+
+    .dateBtn.active {
+        background: #000;
+        color: white;
+        border-color: #000;
+    }
+
+    .timeBtn {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .timeBtn:hover {
+        background: #f3f3f3;
+        border-color: #999;
+    }
+
+    .timeBtn.active {
+        background: #000;
+        color: white;
+        border-color: #000;
+    }
+
+
+
+}
+
+.nextBtn {
+
+    display: inline-block;
+    outline: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0 56px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 7px;
+    font-weight: 400;
+    font-size: 16px;
+    background: #fff;
+    color: #696969;
+    box-shadow: 0 4px 14px 0 rgb(0 0 0 / 10%);
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+
+    :hover {
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 6px 20px rgb(93 93 93 / 23%);
+    }
+
+}
+

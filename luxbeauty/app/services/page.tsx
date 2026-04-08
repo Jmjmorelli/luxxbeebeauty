@@ -6,6 +6,7 @@ import lashlift1 from "../images/lashlift1.jpeg"
 import lashlift2 from "../images/lashlift2.jpeg"
 import fullSet1 from "../images/fullSet1.jpeg"
 import styles from "./page.module.css"
+import { useRouter } from "next/router";
 
 import { useState } from "react";
 import { useCart } from "../context/cardContext";
@@ -63,11 +64,13 @@ const services = [
 
 export default function Services() {
 
+  // const router = useRouter() // used for cleaner redirects as buttons
 
   const { cart } = useCart();
   const { addToCart } = useCart();
   const { removeFromCart } = useCart();
   const { clearCart } = useCart();
+  const { checkCart } = useCart();
 
 
   const exists = cart.length > 0;
@@ -159,9 +162,9 @@ export default function Services() {
           </div>
 
           <div className={styles.bookBtn}>
-            <button style={{ display: "flex", justifyContent: "center", width: "100%", borderRadius: "50px" }} className={styles.btn}><Link  href="/services/book">Book Now</Link></button>
-            
-
+            <Link href="/services/book" className={styles.nextBtn} style={{textDecoration: "none"}}>
+              Book Now
+            </Link>
           </div>
 
         </div>

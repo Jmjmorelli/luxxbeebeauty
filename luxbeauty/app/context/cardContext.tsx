@@ -13,6 +13,7 @@ type CartContextType = {
   addToCart: (item: CartItem) => void;
   removeFromCart: (index: string) => void;
   clearCart: () => void;
+  checkCart: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -21,7 +22,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
+    const savedCart = sessionStorage.getItem("cart");
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
@@ -30,7 +31,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addToCart = (item: CartItem) => {
     setCart((prev) => {
       const updatedCart = [...prev, item];
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
       console.log(updatedCart);
       return updatedCart;
     });
@@ -39,19 +40,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const removeFromCart = (id: string) => {
     setCart((prev) => {
       const updatedCart = prev.filter((item) => item.id !== id);
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
       return updatedCart;
     });
   };
 
+  const checkCart = () => {
+    console.log(cart);
+  }
+
 
   const clearCart = () => {
     setCart([]);
-    localStorage.setItem("cart", JSON.stringify([]));
+    sessionStorage.setItem("cart", JSON.stringify([]));
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, checkCart }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { useCart } from "../../context/cardContext";
+import { useCart } from "../../context/cartContext";
 import styles from "./page.module.css"
 import { useState } from "react";
 import { index } from "drizzle-orm/gel-core";
@@ -36,7 +36,7 @@ const monthNames = [
 export default function Book() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
-    const [selectedTime, setSelectedTime] = useState(null);
+    const [selectedTime, setSelectedTime] = useState<String | null>(null);
 
     const { cart } = useCart();
     const { addToCart } = useCart();
@@ -89,6 +89,10 @@ export default function Book() {
         );
     }
 
+    function logSelection(x: Date | null) {
+        console.log("day selected" + x);
+    }
+
     return (
 
 
@@ -116,81 +120,24 @@ export default function Book() {
                             </div>
                             <div className="calendar__body">
                                 {calendarDays.map((day, index) => {
-
+                                    const isSelected =
+                                        day &&
+                                        selectedDate &&
+                                        day.toDateString() === selectedDate.toDateString();
                                     return (
-                                    <div className="cal-body__day">s</div>
-                                    )
+                                        <div className="cal-body__day" key={index} onClick={() => logSelection(day); }>
+                                            {day ? day.getDate() : ""}
+                                        </div>
+                                    );
                                 })}
-                                <div className="cal-body__week">
-                                    <div className="cal-body__day"></div>
-                                 
-                                </div>
-                                <div className="cal-body__week">
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                </div>
-                                <div className="cal-body__week">
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                </div>
-                                <div className="cal-body__week">
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                </div>
-                                <div className="cal-body__week">
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                </div>
-                                <div className="cal-body__week">
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                    <div className="cal-body__day"></div>
-                                </div>
                             </div>
                         </div>
-                        {/* 
-                        <div style={{ marginLeft: "1rem" }}>
-                            Change Week
-                        </div> */}
-                        {/* <div className={styles.dateRow}>
-                            {dates.map((date) => (
-                                <button
-                                    key={date}
-                                    className={`${styles.dateBtn} ${selectedDate === date ? styles.active : ""}`}
-                                    onClick={() => setSelectedDate(date)}
-                                >
-                                    {date}
-                                </button>
-                            ))}
-                        </div> */}
-                        <div style={{ marginLeft: "1rem" }}>
+
+
+
+                        <div style={{ marginLeft: "1rem", marginTop: "3rem" }}>
                             What time?
                         </div>
-
 
 
                         <div className={styles.timeGrid} style={{ paddingTop: "1rem" }}>
@@ -201,7 +148,11 @@ export default function Book() {
                                 "3:00 PM", "4:00 PM"
                             ].map((time) => (
                                 <button key={time} className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
-                                    onClick={() => setSelectedTime(time)}
+                                    onClick={() => {
+                                        setSelectedTime(time);
+                                        console.log(time);
+                                    }
+                                    }
                                 >
                                     {time}
                                 </button>

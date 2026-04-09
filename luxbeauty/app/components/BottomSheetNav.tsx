@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useCart } from "../context/cardContext";
+import { useCart } from "../context/cartContext";
 import Link from 'next/link';
 
 import styles from './shoppingCart.module.css'

@@ -300,3 +300,21 @@
 
 }
 
+.cal-body_day {
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 10px;
+    min-height: 44px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cal-body_day:hover {
+    background: #f3f3f3;
+}
+
+.active {
+    background: #000;
+    color: white;
+    border-color: #000;
+}

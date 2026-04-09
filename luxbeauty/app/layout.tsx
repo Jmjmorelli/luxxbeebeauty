@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Instrument_Serif, Shadows_Into_Light, Lobster_Two } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "./context/cardContext";
+import { CartProvider } from "./context/cartContext";
 
 const inter = Inter({
   variable: "--font-inter",

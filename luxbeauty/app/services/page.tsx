@@ -9,7 +9,7 @@ import styles from "./page.module.css"
 import { useRouter } from "next/router";
 
 import { useState } from "react";
-import { useCart } from "../context/cardContext";
+import { useCart } from "../context/cartContext";
 
 import Link from 'next/link';
 

@@ -20,42 +20,42 @@ const services = [
 
     category: "Lashes",
     items: [
-      { id: "wet-set", name: "Wet Set", price: 85, description: "TBD" },
-      { id: "hybrid-set", name: "Hybrid Set", price: 85, description: "TBD" },
-      { id: "light-volume-set", name: "Light Volume Set", price: 85, description: "TBD" },
-      { id: "volume-set", name: "Volume Set", price: 85, description: "TBD" },
-      { id: "mega-volume-set", name: "Mega Volume Set", price: 85, description: "TBD" },
-      { id: "wispy-volume-set", name: "Wispy Volume Set", price: 85, description: "TBD" },
-      { id: "full-set", name: "Full Set", price: 85, description: "TBD" },
-      { id: "fill", name: "Fill", price: 65, description: "Refill and refresh existing lashes" },
-      { id: "lash-lift", name: "Lash Lift", price: 40, description: "Natural lash curl enhancement" },
-      { id: "lash-tint", name: "Lash Tint", price: 15, description: "Darkens lashes for fuller look" },
+      { id: "wet-set", name: "Wet Set", price: 85, description: "TBD", duration: 180 },
+      { id: "hybrid-set", name: "Hybrid Set", price: 85, description: "TBD", duration: 180 },
+      { id: "light-volume-set", name: "Light Volume Set", price: 85, description: "TBD", duration: 180 },
+      { id: "volume-set", name: "Volume Set", price: 85, description: "TBD", duration: 180 },
+      { id: "mega-volume-set", name: "Mega Volume Set", price: 85, description: "TBD", duration: 180 },
+      { id: "wispy-volume-set", name: "Wispy Volume Set", price: 85, description: "TBD", duration: 180 },
+      { id: "full-set", name: "Full Set", price: 85, description: "TBD", duration: 180 },
+      { id: "fill", name: "Fill", price: 65, description: "Refill and refresh existing lashes", duration: 120 },
+      { id: "lash-lift", name: "Lash Lift", price: 40, description: "Natural lash curl enhancement", duration: 35 },
+      { id: "lash-tint", name: "Lash Tint", price: 15, description: "Darkens lashes for fuller look", duration: 25 },
     ]
   },
   {
     category: "Brows",
     items: [
-      { id: "brow-wax", name: "Eyebrow Waxing", price: 20, description: "Shapes and cleans brow area" },
-      { id: "brow-razor", name: "Eyebrow Razor Clean Up", price: 10, description: "Quick brow touch-up cleanup" },
-      { id: "brow-tint", name: "Eyebrow Tint", price: 15, description: "Darkens brows for fuller look" },
-      { id: "brow-mapping", name: "Eyebrow Mapping", price: 15, description: "Precision brow shaping guide" },
+      { id: "brow-wax", name: "Eyebrow Waxing", price: 20, description: "Shapes and cleans brow area", duration: 30 },
+      { id: "brow-razor", name: "Eyebrow Razor Clean Up", price: 10, description: "Quick brow touch-up cleanup", duration: 10 },
+      { id: "brow-tint", name: "Eyebrow Tint", price: 15, description: "Darkens brows for fuller look", duration: 35 },
+      { id: "brow-mapping", name: "Eyebrow Mapping", price: 15, description: "Precision brow shaping guide", duration: 25 },
 
     ]
   },
   {
     category: "Waxing",
     items: [
-      { id: "underarms", name: "Underarms", price: 30, description: "Removes underarm hair smoothly" },
-      { id: "legs", name: "Legs", price: 60, description: "Full leg hair removal service" },
+      { id: "underarms", name: "Underarms", price: 30, description: "Removes underarm hair smoothly", duration: 15 },
+      { id: "legs", name: "Legs", price: 60, description: "Full leg hair removal service", duration: 60 }, // TODO: ask how long max;  put 1 hour for the moment
     ]
   },
   {
     category: "Hair",
     items: [
-      { id: "starter-locs", name: "Starter Locs", price: 150, description: "Begin your loc journey" },
-      { id: "retwist", name: "Retwist + Style", price: 150, description: "Maintain and style existing locs" },
-      { id: "flat-iron", name: "Flat Iron", price: 80, description: "Smooth and straighten hair finish" },
-      { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30, description: "Cleanse and styled blowout" },]
+      { id: "starter-locs", name: "Starter Locs", price: 150, description: "Begin your loc journey", duration: 180 },
+      { id: "retwist", name: "Retwist + Style", price: 150, description: "Maintain and style existing locs", duration: 195 },
+      { id: "flat-iron", name: "Flat Iron", price: 80, description: "Smooth and straighten hair finish", duration: 60 },
+      { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30, description: "Cleanse and styled blowout", duration: 30 },]
   }
 ];
 

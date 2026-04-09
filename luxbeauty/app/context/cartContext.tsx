@@ -6,6 +6,7 @@ export type CartItem = {
   id: string;
   name: string;
   price: number;
+  duration: number; // prob makes sense to just track it from the beginning // in minutes
 };
 
 type CartContextType = {

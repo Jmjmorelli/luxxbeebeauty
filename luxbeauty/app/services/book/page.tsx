@@ -125,7 +125,7 @@ export default function Book() {
                                         selectedDate &&
                                         day.toDateString() === selectedDate.toDateString();
                                     return (
-                                        <div className="cal-body__day" key={index} onClick={() => logSelection(day); }>
+                                        <div className="cal-body__day" key={index} onClick={() => logSelection(day) }>
                                             {day ? day.getDate() : ""}
                                         </div>
                                     );

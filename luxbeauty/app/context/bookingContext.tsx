@@ -48,6 +48,10 @@ export function BookingProvider({ children }: { children: ReactNode}) {
         });
     }
 
+    const addStartDateToBooking = (date : Date) => {
+        setBooking()
+    }
+
     const removeFromBooking = (id : string) => {
         setBooking((prev) => {
             const updatedBooking = prev.filter((item) => item.id !== id);

@@ -1,9 +1,10 @@
 "use client"
 import Link from "next/link";
-import { useCart } from "../../context/cartContext";
+import { useCart } from "@/app/context/cartContext";
 import styles from "./page.module.css"
 import { useState } from "react";
 import { index } from "drizzle-orm/gel-core";
+import { useBooking } from "@/app/context/bookingContext";
 
 
 // const timeSlots = [

@@ -9,6 +9,9 @@ import Eyelash6 from "./images/eyelash6.jpeg"
 import Eyebrow1 from "./images/eyebrow1.jpeg"
 import Eyebrow2 from "./images/eyebrow2.jpeg"
 import Link from 'next/link';
+
+import FrontPose1 from "./images/frontPose1.jpeg"
+import HoldingTweezers1 from "./images/holdingTweezers1.jpeg"
 import styles from "./page.module.css"
 import BottomSheetNav from "./components/BottomSheetNav"
 import { Geist, Geist_Mono, Inter, Instrument_Serif, Shadows_Into_Light } from "next/font/google";
@@ -35,13 +38,38 @@ export default function Home() {
 
 				<main>
 					<section className="hero text-center text-light">
-								<div className="hero-copy">
-									<h1 className="hero-title mt-0 brand" style={{paddingBottom: "1rem"}}> LuxxBeeBeauty</h1>
-									{/* <h1 className="hero-title mt-0 brand"> Testing</h1> */}
-									<p className="hero-paragraph"> Looking for a cosmetic upgrade? Browse below for amazing services.</p>
-									<div className="hero-cta">
-										<Link className="button button-primary button-wide-mobile" href="/services">BOOK APPOINTMENT NOW</Link>
-									</div>
+						<div className="hero-copy">
+							<h1 className="hero-title mt-0 brand" style={{ paddingBottom: "1rem" }}> LuxxBeeBeauty</h1>
+							{/* <h1 className="hero-title mt-0 brand"> Testing</h1> */}
+							<p className="hero-paragraph"> where the confidence begins</p>
+							<div className="hero-cta">
+								<Link className="button button-primary button-wide-mobile" href="/services">BOOK APPOINTMENT NOW</Link>
+							</div>
+						</div>
+					</section>
+
+					<section className="gallery">
+						<div className="container">
+							<div className="grid">
+
+								<div className="column-xs-12 column-md-4" style={{ width: '50%' }}>
+									<figure className="img-container">
+										<Image src={FrontPose1} style={{ objectPosition: "center 32%" }} alt="Logo" />
+									</figure>
+								</div>
+								<div className="column-xs-12 column-md-4" style={{ width: '50%' }}>
+									<figure className="img-container">
+										<Image src={HoldingTweezers1} style={{ objectPosition: "center 42%" }} alt="Logo" />
+									</figure>
+								</div>
+
+
+								{/* <div className="column-xs-12" style={{ width: '100%' }}>
+									<figure className="img-container">
+										<Image style={{ objectPosition: "center 55%" }} src={Eyelash2} alt="Logo" />
+									</figure>
+								</div> */}
+							</div>
 						</div>
 					</section>
 					<div className="mockup-container">
@@ -52,9 +80,9 @@ export default function Home() {
 						<div className="container">
 							<div className="grid">
 
-								<div className="column-xs-12 column-md-4" style={{ width: '50%'  }}>
+								<div className="column-xs-12 column-md-4" style={{ width: '50%' }}>
 									<figure className="img-container">
-										<Image src={Eyelash3}  style={{ objectPosition: "center 45%" }} alt="Logo" />
+										<Image src={Eyelash3} style={{ objectPosition: "center 45%" }} alt="Logo" />
 									</figure>
 								</div>
 								<div className="column-xs-12 column-md-6" style={{ width: '50%' }}>
@@ -106,7 +134,7 @@ export default function Home() {
 										<Image src={Eyebrow2} alt="Logo" />
 									</figure>
 								</div>
-								
+
 							</div>
 						</div>
 					</section>

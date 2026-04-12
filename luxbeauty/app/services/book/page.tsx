@@ -4,7 +4,7 @@ import { useCart } from "@/app/context/cartContext";
 import styles from "./page.module.css"
 import { useState } from "react";
 import { index } from "drizzle-orm/gel-core";
-import { BookingProvider, useBooking } from "@/app/context/bookingContext";
+// import { BookingProvider, useBooking } from "@/app/context/bookingContext";
 
 
 // const timeSlots = [
@@ -49,11 +49,11 @@ export default function Book() {
 
 
     // booking logic
-    const { booking } = useBooking();
-    const { addToBooking } = useBooking();
-    const { removeFromBooking } = useBooking();
-    const { clearBooking } = useBooking();
-    const { checkBooking } = useBooking();
+    // const { booking } = useBooking();
+    // const { addToBooking } = useBooking();
+    // const { removeFromBooking } = useBooking();
+    // const { clearBooking } = useBooking();
+    // const { checkBooking } = useBooking();
 
     function getCalendarDays(date: Date) {
         const year = date.getFullYear();
@@ -136,7 +136,7 @@ export default function Book() {
                                         day.toDateString() === selectedDate.toDateString();
 
                                     return (
-                                        <div className="cal-body__day" key={index} onClick={() => logSelection(day); addToBooking()
+                                        <div className="cal-body__day" key={index} onClick={() => logSelection(day)
                                 }>
                                 { day? day.getDate() : ""}
                             </div>

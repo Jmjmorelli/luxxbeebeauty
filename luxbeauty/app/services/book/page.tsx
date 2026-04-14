@@ -4,6 +4,8 @@ import { useCart } from "@/app/context/cartContext";
 import styles from "./page.module.css"
 import { useState } from "react";
 import { index } from "drizzle-orm/gel-core";
+import { BookingData, useBooking } from "@/app/context/bookingContext";
+import { ConsoleLogWriter } from "drizzle-orm";
 // import { BookingProvider, useBooking } from "@/app/context/bookingContext";
 
 
@@ -38,8 +40,6 @@ export default function Book() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
     const [selectedTime, setSelectedTime] = useState<String | null>(null);
-
-
     //cart logic
     const { cart } = useCart();
     const { addToCart } = useCart();
@@ -47,13 +47,43 @@ export default function Book() {
     const { clearCart } = useCart();
     const { checkCart } = useCart();
 
+    // bookingData vars
+
+    const [uniqueBookingID, setUniqueBookingID] = useState("");
+    const [customerName, setCustomerName] = useState("");
+    const [customerPhone, setCustomerPhone] = useState("");
+    const [customerEmail, setCustomerEmail] = useState("");
+    const [listServices, setListServices] = useState("");
+    const [startAt, setStartAt] = useState<number | string>("");
+    const [endAt, setEndAt] = useState<number | string>("");
+    const [status, setStatus] = useState("");
+    const [appointmentNotes, setAppointmentNotes] = useState("");
+    const [customerNotes, setCustomerNotes] = useState("");
+    const [createdAt, setCreatedAt] = useState("");
+
+
+
+
 
     // booking logic
-    // const { booking } = useBooking();
-    // const { addToBooking } = useBooking();
-    // const { removeFromBooking } = useBooking();
-    // const { clearBooking } = useBooking();
-    // const { checkBooking } = useBooking();
+    const { booking } = useBooking();
+    const { clearBooking } = useBooking();
+    const { checkBooking } = useBooking();
+    const { addBooking } = useBooking();
+
+
+    function initializeBookingData() {
+        let x = JSON.stringify(cart);
+
+        console.log(x);
+        // console.log(listServices);
+        console.log(selectedDate);
+        console.log(selectedTime);
+        console.log(customerPhone);
+        console.log(customerName);
+        console.log(customerEmail);
+
+    }
 
     function getCalendarDays(date: Date) {
         const year = date.getFullYear();
@@ -103,6 +133,7 @@ export default function Book() {
         console.log("day selected" + x);
     }
 
+
     return (
 
 
@@ -136,56 +167,78 @@ export default function Book() {
                                         day.toDateString() === selectedDate.toDateString();
 
                                     return (
-                                        <div className="cal-body__day" key={index} onClick={() => logSelection(day)
-                                }>
-                                { day? day.getDate() : ""}
-                            </div>
-                            );
+                                        <div className="cal-body__day" key={index} onClick={() => {
+                                            setSelectedDate(day);
+                                        }
+                                        }>
+                                            {day ? day.getDate() : ""}
+                                        </div>
+                                    );
                                 })}
+                            </div>
+                        </div>
+
+
+
+                        <div style={{ marginLeft: "1rem", marginTop: "3rem" }}>
+                            What time?
+                        </div>
+
+
+                        <div className={styles.timeGrid} style={{ paddingTop: "1rem" }}>
+                            {[
+                                "9:00 AM", "10:00 AM",
+                                "11:00 AM", "12:00 PM",
+                                "1:00 PM", "2:00 PM",
+                                "3:00 PM", "4:00 PM"
+                            ].map((time) => (
+                                <button key={time} className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
+                                    onClick={() => {
+                                        setSelectedTime(time);
+                                        console.log(time);
+                                    }
+                                    }
+                                >
+                                    {time}
+                                </button>
+                            ))}
+                        </div>
+
+
+
+                        <section>
+                            <form className={styles.feedForm} action="#">
+                                <input placeholder="Name" type="text"
+                                    onChange={(e) =>
+                                        setCustomerName(e.target.value)
+                                    } />
+                                <input name="phone" placeholder="Phone number"
+                                    onChange={(e) =>
+                                        setCustomerPhone(e.target.value)
+                                    } />
+                                <input name="email" placeholder="E-mail" type="email"
+                                    onChange={(e) =>
+                                        setCustomerEmail(e.target.value)
+                                    } />
+                                <button className="buttonSubmit">ORDER</button>
+                            </form>
+                        </section>
+
+
+
+                        <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
+                            Please note some services may not be available at certain times, due to the length of the service. If you have any questions about booking, please reach out to me via DM! Thank you!
                         </div>
                     </div>
 
+                    <button className="nextBtn" ><Link href="/services/book/checkout">Checkout</Link></button>
 
+                    <button onClick={initializeBookingData}>
+                        checkCart console log
+                    </button>
 
-                    <div style={{ marginLeft: "1rem", marginTop: "3rem" }}>
-                        What time?
-                    </div>
-
-
-                    <div className={styles.timeGrid} style={{ paddingTop: "1rem" }}>
-                        {[
-                            "9:00 AM", "10:00 AM",
-                            "11:00 AM", "12:00 PM",
-                            "1:00 PM", "2:00 PM",
-                            "3:00 PM", "4:00 PM"
-                        ].map((time) => (
-                            <button key={time} className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
-                                onClick={() => {
-                                    setSelectedTime(time);
-                                    console.log(time);
-                                }
-                                }
-                            >
-                                {time}
-                            </button>
-                        ))}
-                    </div>
-
-
-
-                    <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
-                        Please note some services may not be available at certain times, due to the length of the service. If you have any questions about booking, please reach out to me via DM! Thank you!
-                    </div>
                 </div>
-
-                <button className="nextBtn" ><Link href="/services/book/checkout">Checkout</Link></button>
-
-                <button onClick={checkCart}>
-                    checkCart console log
-                </button>
-
             </div>
-        </div>
         </div >
 
     );

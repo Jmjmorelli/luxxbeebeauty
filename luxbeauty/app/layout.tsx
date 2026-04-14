@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Instrument_Serif, Shadows_Into_Light, Lobster_Two } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./context/cartContext";
+import { BookingProvider } from "./context/bookingContext";
+
 
 const inter = Inter({
   variable: "--font-inter",
@@ -57,8 +59,13 @@ export default function RootLayout({
     <html lang="en" >
       <body
         className={`${instrument.variable} ${lobster.variable} ${shadows.variable}  antialiased`}>
-          <CartProvider>{children}</CartProvider>
-        
+        <CartProvider>
+          <BookingProvider>
+            {children}
+          </BookingProvider>
+        </CartProvider>
+
+
       </body>
     </html>
   );

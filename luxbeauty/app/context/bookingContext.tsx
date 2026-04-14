@@ -21,11 +21,17 @@ export type BookingData = {
 }
 
 type BookingContextType = {
-    booking: BookingData;
-    addToBooking: (booking: BookingData) => void;
-    removeFromBooking: (index: string) => void;
+    booking: BookingData | undefined;
     clearBooking: () => void;
     checkBooking: () => void;
+    addBooking: (id: string,
+        name: string,
+        phone: string,
+        email: string,
+        services: string,
+        startTime: number,
+        endTime: number,
+        appointmentNotes: string) => void;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
@@ -44,6 +50,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
 
     // add customer name
     const addBooking = (
+        id: string,
         name: string,
         phone: string,
         email: string,
@@ -51,58 +58,30 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         startTime: number,
         endTime: number,
         appointmentNotes: string) => {
-        // const newBooking : BookingData = {
-        //     id: crypto.randomUUID.toString(),
-        //     customer_name: name,
-        //     customer_phone: phone,
-        //     service_names: services,
-        //     start_at: startTime,
-        //     end_at: endTime,
-        //     status: "Confirmed",
-        //     appointment_notes: appointmentNotes,
-        //     customer_notes: "",
-        //     created_at:
-        
+        const newBooking: BookingData = {
+            id: id,
+            customer_name: name,
+            customer_phone: phone,
+            customer_email: email,
+            service_names: services,
+            start_at: startTime,
+            end_at: endTime,
+            status: "Confirmed",
+            appointment_notes: appointmentNotes,
+            customer_notes: "",
+            created_at: 1
 
-        // }
+        }
 
-            // console.log(newBooking);
+        console.log(newBooking);
 
-        // sessionStorage.setItem(
+        sessionStorage.setItem("booking", JSON.stringify(newBooking));
+        return (newBooking);
     }
 
 
-    // add customer_phone
-    // add customer_email
-    // add service_names: 
-    // add start_at: 
-    // add end_at:
-    // add status:
-    // add appointment_notes: 
-    // add customer_notes:
-    // add created_at: 
 
 
-
-    // const addToBooking = (data: BookingData) => {
-
-
-    //     setBooking((prev) => {
-    //         const updatedBooking = [...prev, data];
-    //         sessionStorage.setItem("booking", JSON.stringify(updatedBooking));
-    //         console.log(updatedBooking);
-    //         return updatedBooking;
-    //     });
-    // }
-
-
-    // const removeFromBooking = (id: string) => {
-    //     setBooking((prev) => {
-    //         const updatedBooking = prev.filter((item) => item.id !== id);
-    //         sessionStorage.setItem("booking", JSON.stringify(updatedBooking));
-    //         return updatedBooking;
-    //     })
-    // }
 
     const checkBooking = () => {
         console.log(booking);
@@ -116,7 +95,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
 
 
     return (
-        <BookingContext.Provider value={{ clearBooking, checkBooking }}>
+        <BookingContext.Provider value={{ booking, addBooking, clearBooking, checkBooking }}>
             {children}
         </BookingContext.Provider>
     );

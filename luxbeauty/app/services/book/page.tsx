@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useCart } from "@/app/context/cartContext";
 import styles from "./page.module.css"
-import { use, useEffect, useState } from "react";
+import { experimental_taintObjectReference, use, useEffect, useState } from "react";
 import { index, unique } from "drizzle-orm/gel-core";
 import { BookingData, useBooking } from "@/app/context/bookingContext";
 import { ConsoleLogWriter } from "drizzle-orm";
@@ -41,17 +41,11 @@ export default function Book() {
 
     // bookingData vars
 
-    const [uniqueBookingID, setUniqueBookingID] = useState("");
+    // const [uniqueBookingID, setUniqueBookingID] = useState("");
     const [customerName, setCustomerName] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
-    const [listServices, setListServices] = useState("");
-    const [startAt, setStartAt] = useState<number>(0);
-    const [endAt, setEndAt] = useState<number>(0);
-    const [status, setStatus] = useState("");
-    const [appointmentNotes, setAppointmentNotes] = useState("");
     const [customerNotes, setCustomerNotes] = useState("");
-    const [createdAt, setCreatedAt] = useState<number>(0);
 
     const [submitted, setSubmitted] = useState(false);
 
@@ -66,43 +60,67 @@ export default function Book() {
     // GETS ALL INFORMATION READY BEFORE SENDING TO DB
     const initializeBookingData = () => {
 
-        setUniqueBookingID(crypto.randomUUID());
-        setListServices(JSON.stringify(cart));
-        setStatus("Confirmed");
-        setCreatedAt(Date.now());
-        setAppointmentNotes("N/a");
+        // setUniqueBookingID(crypto.randomUUID());
+        // setListServices(JSON.stringify(cart));
+        // setStatus("Confirmed");
+        // setCreatedAt(Date.now());
+        // setAppointmentNotes("N/a");
+
+        const uniqueBookingID = crypto.randomUUID();
+        const listServices = JSON.stringify(cart);
+        const status = "confirmed";
+        const createdAt = Date.now();
+        const appointmentNotes = "N/a";
+
+        let startAt = 0;
+        let endAt = 0;
 
         if (selectedTime?.includes("9:00")) {
-            setStartAt(9);
-            setEndAt(9 + totalHours);
+            startAt = 9;
+            endAt = 9 + totalHours;
+            // setEndAt(9 + totalHours);
         }
         else if (selectedTime?.includes("10:00")) {
-            setStartAt(10);
-            setEndAt(10 + totalHours);
+            startAt = 10;
+            endAt = 10 + totalHours;
+            // setStartAt(10);
+            // setEndAt(10 + totalHours);
         }
         else if (selectedTime?.includes("11:00")) {
-            setStartAt(11);
-            setEndAt(11 + totalHours);
+            startAt = 11;
+            endAt = 11 + totalHours;
+            // setStartAt(11);
+            // setEndAt(11 + totalHours);
         }
         else if (selectedTime?.includes("12:00")) {
-            setStartAt(12);
-            setEndAt(12 + totalHours);
+            startAt = 12;
+            endAt = 12 + totalHours;            
+            // setStartAt(12);
+            // setEndAt(12 + totalHours);
         }
         else if (selectedTime?.includes("1:00")) {
-            setStartAt(1);
-            setEndAt(1 + totalHours);
+            startAt = 1;
+            endAt = 1 + totalHours;
+            // setStartAt(1);
+            // setEndAt(1 + totalHours);
         }
         else if (selectedTime?.includes("2:00")) {
-            setStartAt(2);
-            setEndAt(2 + totalHours);
+            startAt = 2;
+            endAt = 2 + totalHours;
+            // setStartAt(2);
+            // setEndAt(2 + totalHours);
         }
         else if (selectedTime?.includes("3:00")) {
-            setStartAt(3);
-            setEndAt(3 + totalHours);
+            startAt = 3;
+            endAt = 3 + totalHours;
+            // setStartAt(3);
+            // setEndAt(3 + totalHours);
         }
         else if (selectedTime?.includes("4:00")) {
-            setStartAt(4);
-            setEndAt(4 + totalHours);
+            startAt = 4;
+            endAt = 4 + totalHours;            
+            // setStartAt(4);
+            // setEndAt(4 + totalHours);
         }
 
 
@@ -126,20 +144,20 @@ export default function Book() {
 
     function testingLog() {
 
-        console.log(uniqueBookingID);
-        console.log(customerName);
-        console.log(customerPhone);
-        console.log(customerEmail);
-        console.log(listServices);
-        console.log(startAt);
-        console.log(endAt);
-        console.log(status);
-        console.log(appointmentNotes);
-        console.log(customerNotes);
-        console.log(createdAt);
+        // console.log(uniqueBookingID);
+        // console.log(customerName);
+        // console.log(customerPhone);
+        // console.log(customerEmail);
+        // console.log(listServices);
+        // console.log(startAt);
+        // console.log(endAt);
+        // console.log(status);
+        // console.log(appointmentNotes);
+        // console.log(customerNotes);
+        // console.log(createdAt);
 
-        console.log(selectedDate);
-        console.log(selectedTime);
+        // console.log(selectedDate);
+        // console.log(selectedTime);
 
     }
 
@@ -277,13 +295,11 @@ export default function Book() {
                                     onChange={(e) =>
                                         setCustomerNotes(e.target.value)
                                     } />
-                                <button className="buttonSubmit"
-                                    onClick={() => setSubmitted(true)}>ORDER</button>
                             </form>
                         </section>
 
                         <button className="buttonSubmit"
-                            onClick={() => initializeBookingData()}>ORDERww</button>
+                            onClick={() => initializeBookingData()}>Submit Booking</button>
 
 
                         <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>

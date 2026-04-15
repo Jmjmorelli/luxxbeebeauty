@@ -13,4 +13,4 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 - Im using Turso as the database and Drizzle ORM as the ORM, with the libSQL driver/client underneath.
 [here!!](https://orm.drizzle.team/docs/tutorials/drizzle-with-turso)
-
+- Outsourcing [SimplePDF](https://simplepdf.com/embed#embed-editor) for the document signings

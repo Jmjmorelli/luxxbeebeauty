@@ -2,32 +2,15 @@
 import Link from "next/link";
 import { useCart } from "@/app/context/cartContext";
 import styles from "./page.module.css"
-import { useState } from "react";
-import { index } from "drizzle-orm/gel-core";
+import { use, useEffect, useState } from "react";
+import { index, unique } from "drizzle-orm/gel-core";
 import { BookingData, useBooking } from "@/app/context/bookingContext";
 import { ConsoleLogWriter } from "drizzle-orm";
-// import { BookingProvider, useBooking } from "@/app/context/bookingContext";
+import { json } from "stream/consumers";
+import { endpointClientChangedSubscribe } from "next/dist/build/swc/generated-native";
+import { date } from "drizzle-orm/mysql-core";
+import { createAppointment } from "@/app/actions";
 
-
-// const timeSlots = [
-//     "9:00 AM", , "10:00 AM",
-//     "11:00 AM", "12:00 PM",
-//     "1:00 PM", "2:00 PM",
-//     "3:00 PM", "4:00 PM",
-// ];
-
-
-
-const dates = [
-    "Apr 4",
-    "Apr 5",
-    "Apr 6",
-    "Apr 7",
-    "Apr 8",
-    "Apr 9",
-    "Apr 10",
-    "Apr 11"
-];
 
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -40,12 +23,21 @@ export default function Book() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
     const [selectedTime, setSelectedTime] = useState<String | null>(null);
+
     //cart logic
     const { cart } = useCart();
     const { addToCart } = useCart();
     const { removeFromCart } = useCart();
     const { clearCart } = useCart();
     const { checkCart } = useCart();
+
+    // DETERMINE HOW LONG THE CLIENT SESSION WILL BE FOR BOOKING
+
+    const totalMinutes = cart.reduce(
+        (sum, item) => sum + item.duration, 0
+    );
+
+    const totalHours = totalMinutes / 60;
 
     // bookingData vars
 
@@ -54,15 +46,14 @@ export default function Book() {
     const [customerPhone, setCustomerPhone] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
     const [listServices, setListServices] = useState("");
-    const [startAt, setStartAt] = useState<number | string>("");
-    const [endAt, setEndAt] = useState<number | string>("");
+    const [startAt, setStartAt] = useState<number>(0);
+    const [endAt, setEndAt] = useState<number>(0);
     const [status, setStatus] = useState("");
     const [appointmentNotes, setAppointmentNotes] = useState("");
     const [customerNotes, setCustomerNotes] = useState("");
-    const [createdAt, setCreatedAt] = useState("");
+    const [createdAt, setCreatedAt] = useState<number>(0);
 
-
-
+    const [submitted, setSubmitted] = useState(false);
 
 
     // booking logic
@@ -72,16 +63,83 @@ export default function Book() {
     const { addBooking } = useBooking();
 
 
-    function initializeBookingData() {
-        let x = JSON.stringify(cart);
+    // GETS ALL INFORMATION READY BEFORE SENDING TO DB
+    const initializeBookingData = () => {
 
-        console.log(x);
-        // console.log(listServices);
+        setUniqueBookingID(crypto.randomUUID());
+        setListServices(JSON.stringify(cart));
+        setStatus("Confirmed");
+        setCreatedAt(Date.now());
+        setAppointmentNotes("N/a");
+
+        if (selectedTime?.includes("9:00")) {
+            setStartAt(9);
+            setEndAt(9 + totalHours);
+        }
+        else if (selectedTime?.includes("10:00")) {
+            setStartAt(10);
+            setEndAt(10 + totalHours);
+        }
+        else if (selectedTime?.includes("11:00")) {
+            setStartAt(11);
+            setEndAt(11 + totalHours);
+        }
+        else if (selectedTime?.includes("12:00")) {
+            setStartAt(12);
+            setEndAt(12 + totalHours);
+        }
+        else if (selectedTime?.includes("1:00")) {
+            setStartAt(1);
+            setEndAt(1 + totalHours);
+        }
+        else if (selectedTime?.includes("2:00")) {
+            setStartAt(2);
+            setEndAt(2 + totalHours);
+        }
+        else if (selectedTime?.includes("3:00")) {
+            setStartAt(3);
+            setEndAt(3 + totalHours);
+        }
+        else if (selectedTime?.includes("4:00")) {
+            setStartAt(4);
+            setEndAt(4 + totalHours);
+        }
+
+
+
+
+
+
+        // SEND TO BACKEND FOR DB PROCESSING
+
+        addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, startAt, endAt, status, appointmentNotes, customerNotes, createdAt);
+
+    }
+
+    // useEffect(() => {
+    //     if (submitted == true) 
+    // }, [submitted]);
+
+
+
+
+
+    function testingLog() {
+
+        console.log(uniqueBookingID);
+        console.log(customerName);
+        console.log(customerPhone);
+        console.log(customerEmail);
+        console.log(listServices);
+        console.log(startAt);
+        console.log(endAt);
+        console.log(status);
+        console.log(appointmentNotes);
+        console.log(customerNotes);
+        console.log(createdAt);
+
         console.log(selectedDate);
         console.log(selectedTime);
-        console.log(customerPhone);
-        console.log(customerName);
-        console.log(customerEmail);
 
     }
 
@@ -127,10 +185,6 @@ export default function Book() {
         setCurrentMonth(
             new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
         );
-    }
-
-    function logSelection(x: Date | null) {
-        console.log("day selected" + x);
     }
 
 
@@ -195,7 +249,6 @@ export default function Book() {
                                 <button key={time} className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
                                     onClick={() => {
                                         setSelectedTime(time);
-                                        console.log(time);
                                     }
                                     }
                                 >
@@ -220,10 +273,17 @@ export default function Book() {
                                     onChange={(e) =>
                                         setCustomerEmail(e.target.value)
                                     } />
-                                <button className="buttonSubmit">ORDER</button>
+                                <input name="customerNotes" placeholder="Comments/Requests" type="text"
+                                    onChange={(e) =>
+                                        setCustomerNotes(e.target.value)
+                                    } />
+                                <button className="buttonSubmit"
+                                    onClick={() => setSubmitted(true)}>ORDER</button>
                             </form>
                         </section>
 
+                        <button className="buttonSubmit"
+                            onClick={() => initializeBookingData()}>ORDERww</button>
 
 
                         <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
@@ -233,7 +293,7 @@ export default function Book() {
 
                     <button className="nextBtn" ><Link href="/services/book/checkout">Checkout</Link></button>
 
-                    <button onClick={initializeBookingData}>
+                    <button onClick={() => testingLog()}>
                         checkCart console log
                     </button>
 

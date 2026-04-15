@@ -5,6 +5,11 @@ import { date, datetime } from "drizzle-orm/mysql-core";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { json } from "stream/consumers";
 
+import { db } from "../db/index";
+import { appointmentsTable, InsertAppointment, SelectAppointment } from "../db/schema";
+
+
+
 
 export type BookingData = {
     id: string;
@@ -31,7 +36,10 @@ type BookingContextType = {
         services: string,
         startTime: number,
         endTime: number,
-        appointmentNotes: string) => void;
+        status: string,
+        appointmentNotes: string,
+        customerNotes: string,
+        createdAt: number) => void;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
@@ -48,8 +56,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         }
     }, []);
 
-    // add customer name
-    const addBooking = (
+    // add appointment to db using the API route
+    const addBooking = async (
         id: string,
         name: string,
         phone: string,
@@ -57,7 +65,10 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         services: string,
         startTime: number,
         endTime: number,
-        appointmentNotes: string) => {
+        status: string,
+        appointmentNotes: string,
+        customerNotes: string,
+        createdAt: number) => {
         const newBooking: BookingData = {
             id: id,
             customer_name: name,
@@ -66,17 +77,22 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             service_names: services,
             start_at: startTime,
             end_at: endTime,
-            status: "Confirmed",
+            status: status,
             appointment_notes: appointmentNotes,
-            customer_notes: "",
-            created_at: 1
+            customer_notes: customerNotes,
+            created_at: createdAt
+        };
 
-        }
+        const res = await fetch('api/appointments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newBooking),
+        });
 
-        console.log(newBooking);
-
-        sessionStorage.setItem("booking", JSON.stringify(newBooking));
-        return (newBooking);
+        const data = await res.json();
+        console.log(data);
     }
 
 

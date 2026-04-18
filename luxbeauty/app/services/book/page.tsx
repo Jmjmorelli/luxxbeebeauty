@@ -298,13 +298,13 @@ export default function Book() {
                             </form>
                         </section>
 
-                        <button className="buttonSubmit"
-                            onClick={() => initializeBookingData()}>Submit Booking</button>
 
 
                         <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
                             Please note some services may not be available at certain times, due to the length of the service. If you have any questions about booking, please reach out to me via DM! Thank you!
                         </div>
+                        <button className="buttonSubmit"
+                            onClick={() => initializeBookingData()}>Submit Booking</button>
                     </div>
 
                     <button className="nextBtn" ><Link href="/services/book/checkout">Checkout</Link></button>

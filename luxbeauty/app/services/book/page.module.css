@@ -320,10 +320,12 @@
 }
 
 .feedForm {
-  margin-top: 36px;
+  padding-top: 2rem;
   display: flex;
   flex-direction: column;
   width: 300px;
+  margin: auto;
+
 }
 
 .feedForm input {

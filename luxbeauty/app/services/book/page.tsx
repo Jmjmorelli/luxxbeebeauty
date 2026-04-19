@@ -94,7 +94,7 @@ export default function Book() {
         }
         else if (selectedTime?.includes("12:00")) {
             startAt = 12;
-            endAt = 12 + totalHours;            
+            endAt = 12 + totalHours;
             // setStartAt(12);
             // setEndAt(12 + totalHours);
         }
@@ -118,7 +118,7 @@ export default function Book() {
         }
         else if (selectedTime?.includes("4:00")) {
             startAt = 4;
-            endAt = 4 + totalHours;            
+            endAt = 4 + totalHours;
             // setStartAt(4);
             // setEndAt(4 + totalHours);
         }
@@ -279,19 +279,19 @@ export default function Book() {
 
                         <section>
                             <form className={styles.feedForm} action="#">
-                                <input placeholder="Name" type="text"
+                                <input style={{ textAlign: "center" }} placeholder="Name" type="text"
                                     onChange={(e) =>
                                         setCustomerName(e.target.value)
                                     } />
-                                <input name="phone" placeholder="Phone number"
+                                <input style={{ textAlign: "center" }} name="phone" placeholder="Phone number"
                                     onChange={(e) =>
                                         setCustomerPhone(e.target.value)
                                     } />
-                                <input name="email" placeholder="E-mail" type="email"
+                                <input style={{ textAlign: "center" }} name="email" placeholder="E-mail" type="email"
                                     onChange={(e) =>
                                         setCustomerEmail(e.target.value)
                                     } />
-                                <input name="customerNotes" placeholder="Comments/Requests" type="text"
+                                <input style={{ textAlign: "center" }} name="customerNotes" placeholder="Comments/Requests" type="text"
                                     onChange={(e) =>
                                         setCustomerNotes(e.target.value)
                                     } />
@@ -303,15 +303,20 @@ export default function Book() {
                         <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
                             Please note some services may not be available at certain times, due to the length of the service. If you have any questions about booking, please reach out to me via DM! Thank you!
                         </div>
-                        <button className="buttonSubmit"
-                            onClick={() => initializeBookingData()}>Submit Booking</button>
+
+                        <div style={{ margin: "auto", display: "flex", justifyContent: "center", marginTop: "3rem", marginBottom: "5rem" }}>
+                            <button className={styles.nextBtn}
+                                onClick={() => initializeBookingData()}>Proceed</button>
+                        </div>
+                        
+
                     </div>
 
-                    <button className="nextBtn" ><Link href="/services/book/checkout">Checkout</Link></button>
+                    {/* <button className="nextBtn" ><Link href="/services/book/checkout">Checkout</Link></button> */}
 
-                    <button onClick={() => testingLog()}>
+                    {/* <button onClick={() => testingLog()}>
                         checkCart console log
-                    </button>
+                    </button> */}
 
                 </div>
             </div>

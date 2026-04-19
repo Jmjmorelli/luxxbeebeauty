@@ -8,8 +8,13 @@ import { BookingData, useBooking } from "@/app/context/bookingContext";
 import { ConsoleLogWriter } from "drizzle-orm";
 import { json } from "stream/consumers";
 import { endpointClientChangedSubscribe } from "next/dist/build/swc/generated-native";
-import { date } from "drizzle-orm/mysql-core";
+import { convertIndexToString, date } from "drizzle-orm/mysql-core";
 import { createAppointment } from "@/app/actions";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from "@/app/components/CheckoutForm";
+
+
 
 
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -19,7 +24,29 @@ const monthNames = [
     "July", "August", "September", "October", "November", "December"
 ];
 
+const options = {
+    mode: 'payment',
+    amount: 1099,
+    currency: 'usd',
+    paymentMethodCreation: 'manual',
+    // Fully customizable with appearance API.
+};
 export default function Book() {
+
+    if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY == undefined) {
+        throw new Error("Public key invalid");
+    }
+    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY );
+
+    const [clientSecret, setClientSecret] = useState("");
+
+    useEffect(() => {
+        fetch("/api/payment", { method: "POST" })
+            .then((res) => res.json())
+            .then((data) => setClientSecret(data.clientSecret));
+    }, []);
+
+
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
     const [selectedTime, setSelectedTime] = useState<String | null>(null);
@@ -308,7 +335,17 @@ export default function Book() {
                             <button className={styles.nextBtn}
                                 onClick={() => initializeBookingData()}>Proceed</button>
                         </div>
-                        
+
+                        {clientSecret && (
+                            <Elements
+                                stripe={stripePromise}
+                                options={{
+                                    clientSecret,
+                                }}
+                            >
+                                <CheckoutForm />
+                            </Elements>
+                        )}
 
                     </div>
 

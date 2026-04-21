@@ -13,6 +13,7 @@ import { createAppointment } from "@/app/actions";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from "@/app/components/CheckoutForm";
+import CheckoutPage from "@/app/components/CheckoutPage";
 
 
 
@@ -31,12 +32,14 @@ const options = {
     paymentMethodCreation: 'manual',
     // Fully customizable with appearance API.
 };
+
+const amount = 2000.00; // 2000 cents = 20 dollars lol
 export default function Book() {
 
     if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY == undefined) {
         throw new Error("Public key invalid");
     }
-    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY );
+    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
     const [clientSecret, setClientSecret] = useState("");
 
@@ -336,16 +339,28 @@ export default function Book() {
                                 onClick={() => initializeBookingData()}>Proceed</button>
                         </div>
 
-                        {clientSecret && (
+                        {/* {clientSecret && (
                             <Elements
                                 stripe={stripePromise}
                                 options={{
                                     clientSecret,
                                 }}
                             >
-                                <CheckoutForm />
+                                <CheckoutPage amount={amount}/>
                             </Elements>
-                        )}
+                        )} */}
+
+                        <Elements
+                            stripe={stripePromise}
+                            options={{
+                                mode: "payment",
+                                amount: 2000,
+                                currency: "usd",
+                            }}
+                        >
+                            <CheckoutPage amount={amount} />
+                        </Elements>
+
 
                     </div>
 

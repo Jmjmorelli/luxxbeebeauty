@@ -17,12 +17,13 @@ export type BookingData = {
     customer_phone: string;
     customer_email: string;
     service_names: string;
-    start_at: number;
-    end_at: number;
+    start_at: string;
+    end_at: string;
     status: string;
     appointment_notes: string;
     customer_notes: string;
     created_at: number;
+    booking_date: string;
 }
 
 type BookingContextType = {
@@ -34,12 +35,13 @@ type BookingContextType = {
         phone: string,
         email: string,
         services: string,
-        startTime: number,
-        endTime: number,
+        startTime: string,
+        endTime: string,
         status: string,
         appointmentNotes: string,
         customerNotes: string,
-        createdAt: number) => void;
+        createdAt: number,
+        bookingDate: string) => void;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
@@ -63,12 +65,13 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         phone: string,
         email: string,
         services: string,
-        startTime: number,
-        endTime: number,
+        startTime: string,
+        endTime: string,
         status: string,
         appointmentNotes: string,
         customerNotes: string,
-        createdAt: number) => {
+        createdAt: number,
+        bookingDate: string) => {
         const newBooking: BookingData = {
             id: id,
             customer_name: name,
@@ -80,7 +83,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             status: status,
             appointment_notes: appointmentNotes,
             customer_notes: customerNotes,
-            created_at: createdAt
+            created_at: createdAt,
+            booking_date: bookingDate
         };
 
         try {

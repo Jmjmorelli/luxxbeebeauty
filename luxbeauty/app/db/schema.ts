@@ -8,8 +8,9 @@ export const appointmentsTable = sqliteTable('appointments', {
     customer_phone: text('customer_phone').notNull(),
     customer_email: text('customer_email').notNull(),
     service_names: text('service_names').notNull(),
-    start_at: integer('start_at').notNull(),
-    end_at: integer('end_at').notNull(),
+    booking_date: text('booking_date'),
+    start_at: text('start_at').notNull(),
+    end_at: text('end_at').notNull(),
     status: text('status').notNull().default('confirmed'),
     appointment_notes: text('appointment_notes'),
     customer_notes: text('customer_notes'),
@@ -36,24 +37,3 @@ export type SelectAppointment = typeof appointmentsTable.$inferSelect;
 
 export type InsertUserConsent = typeof consentTable.$inferInsert;
 export type SelectUserConsent= typeof consentTable.$inferSelect;
-
-
-
-
-
-
-// export const postsTable = sqliteTable('posts', {
-//   id: integer('id').primaryKey(),
-//   title: text('title').notNull(),
-//   content: text('content').notNull(),
-//   userId: integer('user_id')
-//     .notNull()
-//     .references(() => usersTable.id, { onDelete: 'cascade' }),
-//   createdAt: text('created_at')
-//     .default(sql`(CURRENT_TIMESTAMP)`)
-//     .notNull(),
-//   updatedAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(() => new Date()),
-// });
-
-// export type InsertPost = typeof postsTable.$inferInsert;
-// export type SelectPost = typeof postsTable.$inferSelect;

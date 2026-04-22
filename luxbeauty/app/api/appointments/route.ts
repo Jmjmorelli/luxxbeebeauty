@@ -18,3 +18,26 @@ export async function POST(req: Request) {
         );
     }
 }
+
+export async function GET() {
+    try {
+        const appointments = await db
+            .select({
+                date: appointmentsTable.booking_date,
+                startTime: appointmentsTable.start_at,
+                endTime: appointmentsTable.end_at,
+            })
+            .from(appointmentsTable);
+
+        return NextResponse.json({
+            success: true,
+            data: appointments,
+        });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            { success: false, message: "Failed to fetch appointments" },
+            { status: 500 }
+        )
+    }
+}

@@ -4,7 +4,7 @@ import { useCart } from "@/app/context/cartContext";
 import styles from "./page.module.css"
 import { experimental_taintObjectReference, use, useEffect, useState } from "react";
 import { index, unique } from "drizzle-orm/gel-core";
-import { BookingData, useBooking } from "@/app/context/bookingContext";
+import { BookingData, BookingProvider, useBooking } from "@/app/context/bookingContext";
 import { ConsoleLogWriter } from "drizzle-orm";
 import { json } from "stream/consumers";
 import { endpointClientChangedSubscribe } from "next/dist/build/swc/generated-native";
@@ -12,7 +12,6 @@ import { convertIndexToString, date } from "drizzle-orm/mysql-core";
 import { createAppointment } from "@/app/actions";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from "@/app/components/CheckoutForm";
 import CheckoutPage from "@/app/components/CheckoutPage";
 
 
@@ -34,7 +33,20 @@ const options = {
 };
 
 const amount = 2000.00; // 2000 cents = 20 dollars lol
+
+async function fetchBookedDates() {
+
+    const res = await fetch("/api/appointments");
+    const data = await res.json();
+
+    console.log(data.data);
+    console.log("db pulled");
+
+    return data.data;
+}
 export default function Book() {
+
+
 
     if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY == undefined) {
         throw new Error("Public key invalid");
@@ -50,9 +62,18 @@ export default function Book() {
     }, []);
 
 
+
+
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
     const [selectedTime, setSelectedTime] = useState<String | null>(null);
+
+
+    useEffect(() => {
+
+
+
+    }, [selectedDate]);
 
     //cart logic
     const { cart } = useCart();
@@ -87,6 +108,14 @@ export default function Book() {
     const { addBooking } = useBooking();
 
 
+    function calculateEndTimeToString(endTotal: number) {
+
+        const res = endTotal.toString();
+
+        if (res)
+        
+        return 
+    }
     // GETS ALL INFORMATION READY BEFORE SENDING TO DB
     const initializeBookingData = () => {
 
@@ -102,12 +131,12 @@ export default function Book() {
         const createdAt = Date.now();
         const appointmentNotes = "N/a";
 
-        let startAt = 0;
-        let endAt = 0;
+        let startAt = "";
+        let endAt = "";
 
         if (selectedTime?.includes("9:00")) {
-            startAt = 9;
-            endAt = 9 + totalHours;
+            startAt = "9:00 AM";
+            endAt = calculateEndTimeToString(9 + totalHours);
             // setEndAt(9 + totalHours);
         }
         else if (selectedTime?.includes("10:00")) {
@@ -159,35 +188,8 @@ export default function Book() {
 
 
         // SEND TO BACKEND FOR DB PROCESSING
-
-        addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, startAt, endAt, status, appointmentNotes, customerNotes, createdAt);
-
-    }
-
-    // useEffect(() => {
-    //     if (submitted == true) 
-    // }, [submitted]);
-
-
-
-
-
-    function testingLog() {
-
-        // console.log(uniqueBookingID);
-        // console.log(customerName);
-        // console.log(customerPhone);
-        // console.log(customerEmail);
-        // console.log(listServices);
-        // console.log(startAt);
-        // console.log(endAt);
-        // console.log(status);
-        // console.log(appointmentNotes);
-        // console.log(customerNotes);
-        // console.log(createdAt);
-
-        // console.log(selectedDate);
-        // console.log(selectedTime);
+        const selectedDateString = selectedDate?.toDateString() ?? "not selected";
+        addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, startAt, endAt, status, appointmentNotes, customerNotes, createdAt, selectedDateString);
 
     }
 
@@ -235,6 +237,18 @@ export default function Book() {
         );
     }
 
+    async function isTodayBooked() {
+        const bookedTimes = await fetchBookedDates();
+
+        for (let index = 0; index < bookedTimes.length; index++) {
+            console.log(bookedTimes[index]);
+
+        }
+    }
+
+    function isHourBooked(hour: String) {
+
+    }
 
     return (
 
@@ -294,7 +308,7 @@ export default function Book() {
                                 "1:00 PM", "2:00 PM",
                                 "3:00 PM", "4:00 PM"
                             ].map((time) => (
-                                <button key={time} className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
+                                < button key={time} className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
                                     onClick={() => {
                                         setSelectedTime(time);
                                     }
@@ -337,6 +351,10 @@ export default function Book() {
                         <div style={{ margin: "auto", display: "flex", justifyContent: "center", marginTop: "3rem", marginBottom: "5rem" }}>
                             <button className={styles.nextBtn}
                                 onClick={() => initializeBookingData()}>Proceed</button>
+                        </div>
+                        <div style={{ margin: "auto", display: "flex", justifyContent: "center", marginTop: "3rem", marginBottom: "5rem" }}>
+                            <button className={styles.nextBtn}
+                                onClick={() => isTodayBooked()}>CHECK COMMON TIMES</button>
                         </div>
 
                         {/* {clientSecret && (

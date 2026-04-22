@@ -15,6 +15,41 @@
       "when": 1776309684946,
       "tag": "0001_flashy_krista_starr",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1776825322060,
+      "tag": "0002_yielding_wraith",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1776825629775,
+      "tag": "0003_jazzy_red_shift",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1776825887950,
+      "tag": "0004_colossal_wolverine",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1776826350392,
+      "tag": "0005_solid_selene",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1776835322373,
+      "tag": "0006_quick_texas_twister",
+      "breakpoints": true
     }
   ]
 }

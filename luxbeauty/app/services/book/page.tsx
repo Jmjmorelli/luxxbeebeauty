@@ -24,13 +24,6 @@ const monthNames = [
     "July", "August", "September", "October", "November", "December"
 ];
 
-const options = {
-    mode: 'payment',
-    amount: 1099,
-    currency: 'usd',
-    paymentMethodCreation: 'manual',
-    // Fully customizable with appearance API.
-};
 
 const amount = 2000.00; // 2000 cents = 20 dollars lol
 
@@ -39,11 +32,13 @@ async function fetchBookedDates() {
     const res = await fetch("/api/appointments");
     const data = await res.json();
 
-    console.log(data.data);
-    console.log("db pulled");
+    // console.log(data.data);
+    // console.log("db pulled");
 
     return data.data;
 }
+
+
 export default function Book() {
 
 
@@ -67,13 +62,23 @@ export default function Book() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
     const [selectedTime, setSelectedTime] = useState<String | null>(null);
+    const [bookedTimes, setBookedTimes] = useState<any[]>([]);
 
 
     useEffect(() => {
+        async function load() {
+            const data = await fetchBookedDates();
+            setBookedTimes(data);
+        }
+
+        load();
+    }, []);
+
+    // useEffect(() => {
 
 
 
-    }, [selectedDate]);
+    // }, [selectedDate]);
 
     //cart logic
     const { cart } = useCart();
@@ -108,13 +113,18 @@ export default function Book() {
     const { addBooking } = useBooking();
 
 
-    function calculateEndTimeToString(endTotal: number) {
+    function calculateEndTimeToString(time: number) {
+        const hours = Math.floor(time);
+        const minutes = (time % 1) * 60;
 
-        const res = endTotal.toString();
+        const period = hours >= 12 ? "PM" : "AM";
 
-        if (res)
-        
-        return 
+        let displayHour = hours % 12;
+        if (displayHour === 0) displayHour = 12;
+
+        const minuteStr = minutes === 0 ? "00" : minutes.toString();
+
+        return `${displayHour}:${minuteStr} ${period}`;
     }
     // GETS ALL INFORMATION READY BEFORE SENDING TO DB
     const initializeBookingData = () => {
@@ -140,44 +150,44 @@ export default function Book() {
             // setEndAt(9 + totalHours);
         }
         else if (selectedTime?.includes("10:00")) {
-            startAt = 10;
-            endAt = 10 + totalHours;
+            startAt = "10:00 AM";
+            endAt = calculateEndTimeToString(10 + totalHours);
             // setStartAt(10);
             // setEndAt(10 + totalHours);
         }
         else if (selectedTime?.includes("11:00")) {
-            startAt = 11;
-            endAt = 11 + totalHours;
+            startAt = "11:00 AM";
+            endAt = calculateEndTimeToString(11 + totalHours);
             // setStartAt(11);
             // setEndAt(11 + totalHours);
         }
         else if (selectedTime?.includes("12:00")) {
-            startAt = 12;
-            endAt = 12 + totalHours;
+            startAt = "12:00 PM";
+            endAt = calculateEndTimeToString(12 + totalHours);
             // setStartAt(12);
             // setEndAt(12 + totalHours);
         }
         else if (selectedTime?.includes("1:00")) {
-            startAt = 1;
-            endAt = 1 + totalHours;
+            startAt = "1:00 PM";
+            endAt = calculateEndTimeToString(1 + totalHours);
             // setStartAt(1);
             // setEndAt(1 + totalHours);
         }
         else if (selectedTime?.includes("2:00")) {
-            startAt = 2;
-            endAt = 2 + totalHours;
+            startAt = "2:00 PM";
+            endAt = calculateEndTimeToString(2 + totalHours);
             // setStartAt(2);
             // setEndAt(2 + totalHours);
         }
         else if (selectedTime?.includes("3:00")) {
-            startAt = 3;
-            endAt = 3 + totalHours;
+            startAt = "3:00 PM";
+            endAt = calculateEndTimeToString(3 + totalHours);
             // setStartAt(3);
             // setEndAt(3 + totalHours);
         }
         else if (selectedTime?.includes("4:00")) {
-            startAt = 4;
-            endAt = 4 + totalHours;
+            startAt = "4:00 PM";
+            endAt = calculateEndTimeToString(4 + totalHours);
             // setStartAt(4);
             // setEndAt(4 + totalHours);
         }
@@ -242,14 +252,74 @@ export default function Book() {
 
         for (let index = 0; index < bookedTimes.length; index++) {
             console.log(bookedTimes[index]);
-
         }
+        console.log(selectedDate);
     }
 
-    function isHourBooked(hour: String) {
-
+    function isSameDay(date1: Date, date2: Date) {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
     }
 
+    function convertToDashFormat(dateStr: string) {
+        const parts = dateStr.split(" ");
+
+        const monthMap: Record<string, string> = {
+            Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+            May: "05", Jun: "06", Jul: "07", Aug: "08",
+            Sep: "09", Oct: "10", Nov: "11", Dec: "12",
+        };
+
+        const month = monthMap[parts[1]];
+        const day = parts[2].padStart(2, "0");
+        const year = parts[3];
+
+        return `${year}-${month}-${day}`;
+    }
+
+    function isTimeUnavailable(
+        time: string,
+        selectedDate: Date,
+        bookedTimes: any[]
+    ) {
+
+        const formattedDate = selectedDate
+            ? selectedDate.toISOString().split("T")[0]
+            : null;
+
+
+        if (!formattedDate) return false;
+
+
+        return bookedTimes.some((booking) => {
+            // console.log("seeing FORMAT!!" + booking.date);
+            const bookingDate = convertToDashFormat(booking.date);
+
+            // console.log(formattedDate);
+            // console.log(bookingDate);
+            // console.log(booking.startTime);
+            return (
+
+                bookingDate === formattedDate &&
+                booking.startTime === time
+            );
+        });
+    }
+
+    function isTodayAvailable(day: Date | null) {
+        if (!day) return false;
+        if (day.getDay() == 0) {
+            return false;
+        }
+        else if (day.getDay() == 1) {
+            return false;
+        }
+
+        return true;
+    }
     return (
 
 
@@ -277,19 +347,31 @@ export default function Book() {
                             </div>
                             <div className="calendar__body">
                                 {calendarDays.map((day, index) => {
+
+                                    const available = isTodayAvailable(day)
                                     const isSelected =
                                         day &&
                                         selectedDate &&
                                         day.toDateString() === selectedDate.toDateString();
 
-                                    return (
-                                        <div className="cal-body__day" key={index} onClick={() => {
-                                            setSelectedDate(day);
-                                        }
-                                        }>
-                                            {day ? day.getDate() : ""}
-                                        </div>
-                                    );
+                                    if (available) {
+
+                                        return (
+                                            <div className="cal-body__day" key={index} onClick={() => {
+                                                setSelectedDate(day);
+                                            }
+                                            }>
+                                                {day ? day.getDate() : ""}
+                                            </div>
+                                        );
+                                    }
+                                    else {
+                                        return (
+                                            <div className="cal-body__dayDisabled" key={index}>
+                                                {day ? day.getDate() : ""}
+                                            </div>
+                                        );
+                                    }
                                 })}
                             </div>
                         </div>
@@ -307,16 +389,26 @@ export default function Book() {
                                 "11:00 AM", "12:00 PM",
                                 "1:00 PM", "2:00 PM",
                                 "3:00 PM", "4:00 PM"
-                            ].map((time) => (
-                                < button key={time} className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
-                                    onClick={() => {
-                                        setSelectedTime(time);
-                                    }
-                                    }
-                                >
-                                    {time}
-                                </button>
-                            ))}
+                            ].map((time) => {
+                                if (!selectedDate) return false;
+
+                                const unavailable = isTimeUnavailable(time, selectedDate, bookedTimes);
+
+                                return (
+                                    <button
+                                        key={time}
+                                        className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
+                                        disabled={unavailable}
+                                        onClick={() => {
+                                            if (!unavailable) {
+                                                setSelectedTime(time);
+                                            }
+                                        }}
+                                    >
+                                        {unavailable ? `Unavailable` : time}
+                                    </button>
+                                );
+                            })}
                         </div>
 
 

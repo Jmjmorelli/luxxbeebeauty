@@ -2166,6 +2166,7 @@ img {
   width: 30px;
   height: 30px;
   text-align: center;
+  color: #000;
 
   &:hover {
     /* background-color: #42A5F5;. */
@@ -2182,11 +2183,12 @@ img {
 
 .cal-month__current {
   text-align: center;
-  color: #6b7a90;
+  color: #000;
 }
 
 .cal-head__day,
-.cal-body__day {
+.cal-body__day,
+.cal-body__dayDisabled {
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -2195,6 +2197,8 @@ img {
 
 .cal-body__week,
 .calendar__head {
+  color: #000;
+  font-weight: bold;
   display: block;
   margin-left: .75rem;
   height: 50px;
@@ -2217,10 +2221,35 @@ img {
 }
 
 .cal-body__day {
-  color: #777;
+  color: #000;
+  font-weight: bold;
   line-height: 50px;
   text-align: center;
   cursor: pointer;
+
+  &:hover {
+    /* background-color: #42A5F5;. */
+    /* box-shadow: 0 5px 5px -5px rgba(0,0,0,0.75); */
+    /* border-radius: 50%; */
+    font-weight: 800;
+    color: #111;
+  }
+
+  .cal-body__day.active {
+    background: #000;
+    color: white;
+    border-color: #000;
+  }
+
+}
+
+.cal-body__dayDisabled {
+  color: #fff;
+  background-color: #fff;
+  line-height: 50px;
+  text-align: center;
+  cursor: none;
+  pointer-events: none;
 
   &:hover {
     /* background-color: #42A5F5;. */

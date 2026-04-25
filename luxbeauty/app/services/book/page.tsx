@@ -114,7 +114,7 @@ export default function Book() {
 
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
-    const [selectedTime, setSelectedTime] = useState<String | null>(null);
+    const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [bookedTimes, setBookedTimes] = useState<any[]>([]);
 
 
@@ -168,100 +168,8 @@ export default function Book() {
     const { addBooking } = useBooking();
 
 
-    function calculateEndTimeToString(time: number) {
-        const hours = Math.floor(time);
-        const minutes = (time % 1) * 60;
 
-        const period = hours >= 12 ? "PM" : "AM";
-
-        let displayHour = hours % 12;
-        if (displayHour === 0) displayHour = 12;
-
-        const minuteStr = minutes === 0 ? "00" : minutes.toString();
-
-        return `${displayHour}:${minuteStr} ${period}`;
-    }
-    // GETS ALL INFORMATION READY BEFORE SENDING TO DB
-    const initializeBookingData = () => {
-
-        // setUniqueBookingID(crypto.randomUUID());
-        // setListServices(JSON.stringify(cart));
-        // setStatus("Confirmed");
-        // setCreatedAt(Date.now());
-        // setAppointmentNotes("N/a");
-
-        const uniqueBookingID = crypto.randomUUID();
-        const listServices = JSON.stringify(cart);
-        const status = "confirmed";
-        const createdAt = Date.now();
-        const appointmentNotes = "N/a";
-
-        let startAt = "";
-        let endAt = "";
-
-        if (!selectedTime) {
-            return;
-
-        }
-        if (selectedTime?.includes("9:00")) {
-            startAt = "9:00 AM";
-            endAt = calculateEndTimeToString(9 + totalHours);
-            // setEndAt(9 + totalHours);
-        }
-        else if (selectedTime?.includes("10:00")) {
-            startAt = "10:00 AM";
-            endAt = calculateEndTimeToString(10 + totalHours);
-            // setStartAt(10);
-            // setEndAt(10 + totalHours);
-        }
-        else if (selectedTime?.includes("11:00")) {
-            startAt = "11:00 AM";
-            endAt = calculateEndTimeToString(11 + totalHours);
-            // setStartAt(11);
-            // setEndAt(11 + totalHours);
-        }
-        else if (selectedTime?.includes("12:00")) {
-            startAt = "12:00 PM";
-            endAt = calculateEndTimeToString(12 + totalHours);
-            // setStartAt(12);
-            // setEndAt(12 + totalHours);
-        }
-        else if (selectedTime?.includes("1:00")) {
-            startAt = "1:00 PM";
-            endAt = calculateEndTimeToString(1 + totalHours);
-            // setStartAt(1);
-            // setEndAt(1 + totalHours);
-        }
-        else if (selectedTime?.includes("2:00")) {
-            startAt = "2:00 PM";
-            endAt = calculateEndTimeToString(2 + totalHours);
-            // setStartAt(2);
-            // setEndAt(2 + totalHours);
-        }
-        else if (selectedTime?.includes("3:00")) {
-            startAt = "3:00 PM";
-            endAt = calculateEndTimeToString(3 + totalHours);
-            // setStartAt(3);
-            // setEndAt(3 + totalHours);
-        }
-        else if (selectedTime?.includes("4:00")) {
-            startAt = "4:00 PM";
-            endAt = calculateEndTimeToString(4 + totalHours);
-            // setStartAt(4);
-            // setEndAt(4 + totalHours);
-        }
-
-
-
-
-
-
-        // SEND TO BACKEND FOR DB PROCESSING
-        const selectedDateString = selectedDate?.toDateString() ?? "not selected";
-        addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, startAt, endAt, status, appointmentNotes, customerNotes, createdAt, selectedDateString);
-
-    }
-
+ 
     function getCalendarDays(date: Date) {
         const year = date.getFullYear();
         const month = date.getMonth();
@@ -530,7 +438,11 @@ export default function Book() {
                                         currency: "usd",
                                     }}
                                 >
-                                    <CheckoutPage amount={amount} />
+                                    <CheckoutPage amount={amount}
+                                    customerEmail={customerEmail} 
+                                    formattedDate={selectedDate.toLocaleDateString()}
+                                    selectedTime={selectedTime}
+                                    uniqueID={uniqu/>
                                 </Elements>
                             </div>
                         }

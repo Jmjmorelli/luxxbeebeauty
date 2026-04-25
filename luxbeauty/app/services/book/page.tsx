@@ -13,6 +13,10 @@ import { createAppointment } from "@/app/actions";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutPage from "@/app/components/CheckoutPage";
+import { DocusealForm } from '@docuseal/react';
+import { DocusealBuilder } from '@docuseal/react'
+import { useRef } from 'react';
+import SignaturePad from "@/app/components/SignaturePad";
 
 
 
@@ -49,11 +53,60 @@ export default function Book() {
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
     const [clientSecret, setClientSecret] = useState("");
+    const [token, setToken] = useState();
+
 
     useEffect(() => {
         fetch("/api/payment", { method: "POST" })
             .then((res) => res.json())
             .then((data) => setClientSecret(data.clientSecret));
+
+
+
+        // fetch('/api/docuseal', {
+        //     method: 'POST',
+        // })
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         setToken(data.token);
+        //     });
+
+    }, []);
+
+
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        let NutrientViewer: any;
+
+        async function loadPdf() {
+            const container = containerRef.current;
+            if (!container) return;
+
+            try {
+                NutrientViewer = (await import("@nutrient-sdk/viewer")).default;
+
+                NutrientViewer.unload(container);
+
+                await NutrientViewer.load({
+                    container,
+                    useCDN: true,
+                    document: "/documents/Eyelash-Extension-Consent-Form.pdf",
+                });
+
+                console.log("PDF loaded");
+            } catch (err) {
+                console.error("PDF failed to load:", err);
+            }
+        }
+
+        loadPdf();
+
+        return () => {
+            if (NutrientViewer && containerRef.current) {
+                NutrientViewer.unload(containerRef.current);
+            }
+        };
     }, []);
 
 
@@ -73,6 +126,8 @@ export default function Book() {
 
         load();
     }, []);
+
+
 
     // useEffect(() => {
 
@@ -144,6 +199,10 @@ export default function Book() {
         let startAt = "";
         let endAt = "";
 
+        if (!selectedTime) {
+            return;
+
+        }
         if (selectedTime?.includes("9:00")) {
             startAt = "9:00 AM";
             endAt = calculateEndTimeToString(9 + totalHours);
@@ -322,13 +381,18 @@ export default function Book() {
     }
     return (
 
-
         <div className="body-wrap boxed-container">
             <div className={styles.bookingWrapper}>
-
+                <div className={styles.returnBtn}
+                    style={{ position: "fixed", display: "flex", margin: "1rem", color: "white", borderRadius: "10px", backgroundColor: "black", zIndex: "1000", bottom: "0", justifyContent: "center", alignItems: "center" }}
+                >
+                    <Link href="/services/" style={{ color: "white" }}>
+                        Return to Services
+                    </Link>
+                </div>
                 <div>
                     <div className={styles.container}>
-                        <div className="datePicker" style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
+                        <div className="datePicker" style={{ paddingTop: "2rem", marginLeft: "1rem", color: "black" }}>
                             When would you like to book your appointment?
                         </div>
 
@@ -350,14 +414,14 @@ export default function Book() {
 
                                     const available = isTodayAvailable(day)
                                     const isSelected =
-                                        day &&
-                                        selectedDate &&
+                                        !!day &&
+                                        !!selectedDate &&
                                         day.toDateString() === selectedDate.toDateString();
 
                                     if (available) {
 
                                         return (
-                                            <div className="cal-body__day" key={index} onClick={() => {
+                                            <div className={isSelected ? 'cal-body__daySelected' : 'cal-body__day'} key={index} onClick={() => {
                                                 setSelectedDate(day);
                                             }
                                             }>
@@ -367,6 +431,7 @@ export default function Book() {
                                     }
                                     else {
                                         return (
+
                                             <div className="cal-body__dayDisabled" key={index}>
                                                 {day ? day.getDate() : ""}
                                             </div>
@@ -377,10 +442,18 @@ export default function Book() {
                         </div>
 
 
-
-                        <div style={{ marginLeft: "1rem", marginTop: "3rem" }}>
-                            What time?
-                        </div>
+                        {
+                            selectedDate &&
+                            <div style={{ marginLeft: "1rem", color: "green", fontWeight: "bold" }}>
+                                {selectedDate.toLocaleDateString()}
+                            </div>
+                        }
+                        {
+                            selectedDate &&
+                            <div style={{ marginLeft: "1rem", color: "black" }}>
+                                What time?
+                            </div>
+                        }
 
 
                         <div className={styles.timeGrid} style={{ paddingTop: "1rem" }}>
@@ -403,6 +476,7 @@ export default function Book() {
                                             if (!unavailable) {
                                                 setSelectedTime(time);
                                             }
+                                            else setSelectedTime(null);
                                         }}
                                     >
                                         {unavailable ? `Unavailable` : time}
@@ -413,73 +487,85 @@ export default function Book() {
 
 
 
-                        <section>
-                            <form className={styles.feedForm} action="#">
-                                <input style={{ textAlign: "center" }} placeholder="Name" type="text"
-                                    onChange={(e) =>
-                                        setCustomerName(e.target.value)
-                                    } />
-                                <input style={{ textAlign: "center" }} name="phone" placeholder="Phone number"
-                                    onChange={(e) =>
-                                        setCustomerPhone(e.target.value)
-                                    } />
-                                <input style={{ textAlign: "center" }} name="email" placeholder="E-mail" type="email"
-                                    onChange={(e) =>
-                                        setCustomerEmail(e.target.value)
-                                    } />
-                                <input style={{ textAlign: "center" }} name="customerNotes" placeholder="Comments/Requests" type="text"
-                                    onChange={(e) =>
-                                        setCustomerNotes(e.target.value)
-                                    } />
-                            </form>
-                        </section>
+                        {
+                            selectedDate && selectedTime &&
+                            <section>
+                                <form className={styles.feedForm} action="#">
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} placeholder="Name" type="text"
+                                        onChange={(e) =>
+                                            setCustomerName(e.target.value)
+                                        } />
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="phone" placeholder="Phone number"
+                                        onChange={(e) =>
+                                            setCustomerPhone(e.target.value)
+                                        } />
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="email" placeholder="E-mail" type="email"
+                                        onChange={(e) =>
+                                            setCustomerEmail(e.target.value)
+                                        } />
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="customerNotes" placeholder="Comments/Requests" type="text"
+                                        onChange={(e) =>
+                                            setCustomerNotes(e.target.value)
+                                        } />
+                                </form>
+                            </section>
+                        }
+
+                        {
+                            selectedDate && selectedTime &&
+                            <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
+                                *As per policy, a $20 fee is required to secure your booking
+                            </div>
+                        }
 
 
+                        {
+                            selectedDate && selectedTime &&
+                            <div style={{ margin: "1rem" }}>
+                                <Elements
+                                    stripe={stripePromise}
+                                    options={{
+                                        mode: "payment",
+                                        amount: 2000,
+                                        currency: "usd",
+                                    }}
+                                >
+                                    <CheckoutPage amount={amount} />
+                                </Elements>
+                            </div>
+                        }
 
-                        <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
-                            Please note some services may not be available at certain times, due to the length of the service. If you have any questions about booking, please reach out to me via DM! Thank you!
+                        <div style={{ paddingTop: "2rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                            Please note some services may not be available at certain times, due to the length of the service.
                         </div>
 
+                        <div style={{ paddingTop: "1rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                            If you have any questions about booking, please reach out to me via DM! Thank you!
+                        </div>
+
+                        <div style={{ paddingTop: "1rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                            Electronic consent forms coming soon.
+                        </div>
+                        {/* 
                         <div style={{ margin: "auto", display: "flex", justifyContent: "center", marginTop: "3rem", marginBottom: "5rem" }}>
                             <button className={styles.nextBtn}
                                 onClick={() => initializeBookingData()}>Proceed</button>
-                        </div>
-                        <div style={{ margin: "auto", display: "flex", justifyContent: "center", marginTop: "3rem", marginBottom: "5rem" }}>
-                            <button className={styles.nextBtn}
-                                onClick={() => isTodayBooked()}>CHECK COMMON TIMES</button>
+                        </div> */}
+
+
+                        <div style={{ marginBottom: "8rem" }}>
+
                         </div>
 
-                        {/* {clientSecret && (
-                            <Elements
-                                stripe={stripePromise}
-                                options={{
-                                    clientSecret,
-                                }}
-                            >
-                                <CheckoutPage amount={amount}/>
-                            </Elements>
-                        )} */}
-
-                        <Elements
-                            stripe={stripePromise}
-                            options={{
-                                mode: "payment",
-                                amount: 2000,
-                                currency: "usd",
+                        {/* <SignaturePad
+                            name="Joseph Morelli"
+                            onSigned={(pdfUrl) => {
+                                window.open(pdfUrl, "_blank");
                             }}
-                        >
-                            <CheckoutPage amount={amount} />
-                        </Elements>
+                        /> */}
 
 
                     </div>
-
-                    {/* <button className="nextBtn" ><Link href="/services/book/checkout">Checkout</Link></button> */}
-
-                    {/* <button onClick={() => testingLog()}>
-                        checkCart console log
-                    </button> */}
-
                 </div>
             </div>
         </div >

@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useInsertionEffect } from "react";
 import { useStripe, PaymentElement, useElements } from "@stripe/react-stripe-js";
 import { AwsDataApiTransaction } from "drizzle-orm/aws-data-api/pg";
-
+import Link from 'next/link';
+ 
 const CheckoutPage = ({ amount }: { amount: number }) => {
     const stripe = useStripe();
     const elements = useElements();
@@ -46,7 +47,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             return;
         }
 
-        const {error} = await stripe.confirmPayment ({
+        const { error } = await stripe.confirmPayment({
             elements,
             clientSecret,
             confirmParams: {
@@ -58,7 +59,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             // This point is only reached if there is an immediate error when 
             // confirming the payment . Show the error to your customer 
             setErrorMessage(error.message);
-        } 
+        }
         else {
             // The payment UI automatically closes with a success animation.
             // Your customer is redirected to your `return_url`
@@ -70,9 +71,9 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form style={{ display: "flex", flexDirection: "column" }} onSubmit={handleSubmit}>
             {clientSecret && <PaymentElement />}
-            <button disabled={!stripe || loading}> {!loading ? `Pay ${amount}` : "Processing..."}
+            <button style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }} className="nextBtn" disabled={!stripe || loading}> {!loading ? `Submit Booking` : "Processing..."}
             </button>
         </form>
     );

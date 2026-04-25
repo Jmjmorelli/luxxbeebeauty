@@ -2188,7 +2188,8 @@ img {
 
 .cal-head__day,
 .cal-body__day,
-.cal-body__dayDisabled {
+.cal-body__dayDisabled,
+.cal-body__daySelected {
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -2221,6 +2222,28 @@ img {
 }
 
 .cal-body__day {
+  color: #000;
+  font-weight: bold;
+  line-height: 50px;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    /* background-color: #42A5F5;. */
+    /* box-shadow: 0 5px 5px -5px rgba(0,0,0,0.75); */
+    /* border-radius: 50%; */
+    font-weight: 800;
+    color: #111;
+  }
+
+  .cal-body__day.active {
+    background: #000;
+    color: white;
+    border-color: #000;
+  }
+
+}
+.cal-body__daySelected {
   color: #000;
   font-weight: bold;
   line-height: 50px;
@@ -2281,4 +2304,30 @@ img {
   box-shadow: 0 5px 10px -5px rgba(0, 0, 0, .75);
   border-radius: 50%;
   color: #111;
+}
+
+
+.nextBtn {
+
+    display: inline-block;
+    outline: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0 56px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 7px;
+    font-weight: 400;
+    font-size: 16px;
+    background: #fff;
+    color: black;
+    font-weight: bold;
+    box-shadow: 0 4px 14px 0 rgb(0 0 0 / 10%);
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+
+    :hover {
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 6px 20px rgb(93 93 93 / 23%);
+    }
+
 }

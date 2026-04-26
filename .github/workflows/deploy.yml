@@ -34,6 +34,7 @@ jobs:
             SMTP_PASS: ${{ secrets.SMTP_PASS }}
             TURSO_CONNECTION_URL: ${{ secrets.TURSO_CONNECTION_URL }}
             TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+            NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}}
 
       - name: Prepare SSH key
         run: |

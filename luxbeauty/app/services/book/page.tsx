@@ -52,26 +52,26 @@ export default function Book() {
     }
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-    const [clientSecret, setClientSecret] = useState("");
-    const [token, setToken] = useState();
+    // const [clientSecret, setClientSecret] = useState("");
+    // const [token, setToken] = useState();
 
 
-    useEffect(() => {
-        fetch("/api/payment", { method: "POST" })
-            .then((res) => res.json())
-            .then((data) => setClientSecret(data.clientSecret));
+    // useEffect(() => {
+    //     fetch("/api/payment", { method: "POST" })
+    //         .then((res) => res.json())
+    //         .then((data) => setClientSecret(data.clientSecret));
 
 
 
-        // fetch('/api/docuseal', {
-        //     method: 'POST',
-        // })
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         setToken(data.token);
-        //     });
+    //     // fetch('/api/docuseal', {
+    //     //     method: 'POST',
+    //     // })
+    //     //     .then((response) => response.json())
+    //     //     .then((data) => {
+    //     //         setToken(data.token);
+    //     //     });
 
-    }, []);
+    // }, []);
 
 
     const containerRef = useRef(null);
@@ -442,7 +442,10 @@ export default function Book() {
                                     customerEmail={customerEmail} 
                                     formattedDate={selectedDate.toLocaleDateString()}
                                     selectedTime={selectedTime}
-                                    uniqueID={uniqu/>
+                                    customerName={customerName}
+                                    customerPhone={customerPhone}
+                                    customerNotes={customerNotes}
+                                    />
                                 </Elements>
                             </div>
                         }

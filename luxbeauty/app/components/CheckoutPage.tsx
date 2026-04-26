@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useBooking } from "../context/bookingContext";
 import { useCart } from "../context/cartContext";
 import { stat } from "fs";
+import { unique } from "drizzle-orm/gel-core";
 
 type CheckoutPageProps = {
     amount: number;
@@ -47,14 +48,23 @@ const CheckoutPage = ({ amount, customerEmail, formattedDate, selectedTime, cust
     );
 
     const totalHours = totalMinutes / 60;
-
+    const uniqueBookingID: string = crypto.randomUUID();
+    
     useEffect(() => {
+        console.log("sending the email" + customerEmail);
+        
         fetch("/api/payment", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ amount: amount }),
+            body: JSON.stringify({
+                amount,
+                customerEmail,
+                formattedDate,
+                selectedTime,
+                uniqueBookingID,
+            }),
         })
             .then((res) => res.json())
             .then((data) => setClientSecret(data.clientSecret));
@@ -63,12 +73,13 @@ const CheckoutPage = ({ amount, customerEmail, formattedDate, selectedTime, cust
 
 
 
-
-    }, [amount]);
+    }, [amount, customerEmail]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
+        const test: number = 123;
+
 
         if (!stripe || !elements) {
             return;
@@ -82,11 +93,16 @@ const CheckoutPage = ({ amount, customerEmail, formattedDate, selectedTime, cust
             return;
         }
 
+        const returnUrl = new URL("http://localhost:3000/payment-success");
+        returnUrl.searchParams.set("id", uniqueBookingID);
+
+        console.log("do we enter?");
+
         const { error } = await stripe.confirmPayment({
             elements,
             clientSecret,
             confirmParams: {
-                return_url: `http://www.localhost:3000/payment-success?amount=${amount}`,
+                return_url: returnUrl.toString()
             },
         });
 
@@ -95,8 +111,9 @@ const CheckoutPage = ({ amount, customerEmail, formattedDate, selectedTime, cust
             // confirming the payment . Show the error to your customer 
             setErrorMessage(error.message);
         }
-        else {
-            const uniqueBookingID = crypto.randomUUID();
+        else if (!error) {
+
+            // const uniqueBookingID = crypto.randomUUID();
             const listServices = JSON.stringify(cart);
             const status = "confirmed";
             const createdAt = Date.now();
@@ -171,10 +188,11 @@ const CheckoutPage = ({ amount, customerEmail, formattedDate, selectedTime, cust
                 }),
             });
             // What is missing
-            
+
             addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, startAt, endAt, status, appointmentNotes, customerNotes, createdAt, formattedDate);
 
 
+            // TODO: 
 
             // The payment UI automatically closes with a success animation.
             // Your customer is redirected to your `return_url`

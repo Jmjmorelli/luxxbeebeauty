@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
             customerEmail,
             listServices,
             selectedTime,
+            endAt,
             bookingStatus,
             appointmentNotes,
             customerNotes,
@@ -30,12 +31,16 @@ export async function POST(request: NextRequest) {
                 customerEmail,
                 listServices,
                 selectedTime,
+                endAt,
                 bookingStatus,
                 appointmentNotes,
                 customerNotes,
                 formattedDate,
             },
         });
+
+        console.log("service ends at this time inside the payment api" + endAt);
+
 
         return NextResponse.json({ clientSecret: paymentIntent.client_secret })
     } catch (error) {

@@ -13,6 +13,7 @@ import { unique } from "drizzle-orm/gel-core";
 const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, selectedTime,
     customerName, customerPhone, customerNotes,
     listServices,
+    endAt,
     bookingStatus,
     appointmentNotes }
     : {
@@ -25,7 +26,7 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
         customerPhone: string;
         customerNotes: string;
         listServices: string;
-        // endAt: string;
+        endAt: string;
         bookingStatus: string;
         appointmentNotes: string;
         // createdAt: number;
@@ -46,9 +47,9 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
 
     const totalHours = totalMinutes / 60;
 
-    
+
     useEffect(() => {
-         fetch("/api/payment", {
+        fetch("/api/payment", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -61,7 +62,7 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
                 customerEmail,
                 listServices,
                 selectedTime,
-                // endAt,
+                endAt,
                 bookingStatus,
                 appointmentNotes,
                 customerNotes,
@@ -97,9 +98,7 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
         }
 
         const returnUrl = new URL("http://localhost:3000/payment-success");
-        returnUrl.searchParams.set("id", uniqueBookingID);
-
-        console.log("do we enter?");
+        // returnUrl.searchParams.set("id", uniqueBookingID);
 
         const { error } = await stripe.confirmPayment({
             elements,
@@ -116,23 +115,8 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
         }
         else if (!error) {
 
-            // const uniqueBookingID = crypto.randomUUID();
-            const listServices = JSON.stringify(cart);
-            const status = "confirmed";
-            const createdAt = Date.now();
-            const appointmentNotes = "N/a";
-
-            let startAt = "";
-            let endAt = "";
-
-            if (!selectedTime) {
-                return;
-
-            }
-
-
+        
             // TODO: 
-
             // The payment UI automatically closes with a success animation.
             // Your customer is redirected to your `return_url`
         }

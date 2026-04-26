@@ -28,24 +28,24 @@ const services = [
       { id: "wispy-volume-set", name: "Wispy Volume Set", price: 85, description: "TBD", duration: 180 },
       { id: "full-set", name: "Full Set", price: 85, description: "TBD", duration: 180 },
       { id: "fill", name: "Fill", price: 65, description: "Refill and refresh existing lashes", duration: 120 },
-      { id: "lash-lift", name: "Lash Lift", price: 40, description: "Natural lash curl enhancement", duration: 35 },
-      { id: "lash-tint", name: "Lash Tint", price: 15, description: "Darkens lashes for fuller look", duration: 25 },
+      { id: "lash-lift", name: "Lash Lift", price: 40, description: "Natural lash curl enhancement", duration: 30 },
+      { id: "lash-tint", name: "Lash Tint", price: 15, description: "Darkens lashes for fuller look", duration: 30 },
     ]
   },
   {
     category: "Brows",
     items: [
       { id: "brow-wax", name: "Eyebrow Waxing", price: 20, description: "Shapes and cleans brow area", duration: 30 },
-      { id: "brow-razor", name: "Eyebrow Razor Clean Up", price: 10, description: "Quick brow touch-up cleanup", duration: 10 },
-      { id: "brow-tint", name: "Eyebrow Tint", price: 15, description: "Darkens brows for fuller look", duration: 35 },
-      { id: "brow-mapping", name: "Eyebrow Mapping", price: 15, description: "Precision brow shaping guide", duration: 25 },
+      { id: "brow-razor", name: "Eyebrow Razor Clean Up", price: 10, description: "Quick brow touch-up cleanup", duration: 30 },
+      { id: "brow-tint", name: "Eyebrow Tint", price: 15, description: "Darkens brows for fuller look", duration: 30 },
+      { id: "brow-mapping", name: "Eyebrow Mapping", price: 15, description: "Precision brow shaping guide", duration: 30 },
 
     ]
   },
   {
     category: "Waxing",
     items: [
-      { id: "underarms", name: "Underarms", price: 30, description: "Removes underarm hair smoothly", duration: 15 },
+      { id: "underarms", name: "Underarms", price: 30, description: "Removes underarm hair smoothly", duration: 30 },
       { id: "legs", name: "Legs", price: 60, description: "Full leg hair removal service", duration: 60 }, // TODO: ask how long max;  put 1 hour for the moment
     ]
   },
@@ -53,7 +53,7 @@ const services = [
     category: "Hair",
     items: [
       { id: "starter-locs", name: "Starter Locs", price: 150, description: "Begin your loc journey", duration: 180 },
-      { id: "retwist", name: "Retwist + Style", price: 150, description: "Maintain and style existing locs", duration: 195 },
+      { id: "retwist", name: "Retwist + Style", price: 150, description: "Maintain and style existing locs", duration: 210 },
       { id: "flat-iron", name: "Flat Iron", price: 80, description: "Smooth and straighten hair finish", duration: 60 },
       { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30, description: "Cleanse and styled blowout", duration: 30 },]
   }

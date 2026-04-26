@@ -2,35 +2,11 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import nodemailer from "nodemailer";
 import { useBooking } from "@/app/context/bookingContext";
-import { useCart } from "@/app/context/cartContext";
 import { date } from "drizzle-orm/mysql-core";
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-
-const { addBooking } = useBooking();
-const { cart } = useCart();
-
-function calculateEndTimeToString(time: number) {
-    const hours = Math.floor(time);
-    const minutes = (time % 1) * 60;
-
-    const period = hours >= 12 ? "PM" : "AM";
-
-    let displayHour = hours % 12;
-    if (displayHour === 0) displayHour = 12;
-
-    const minuteStr = minutes === 0 ? "00" : minutes.toString();
-
-    return `${displayHour}:${minuteStr} ${period}`;
-}
-
-const totalMinutes = cart.reduce(
-    (sum, item) => sum + item.duration, 0
-);
-
-const totalHours = totalMinutes / 60;
 
 const transporter = nodemailer.createTransport({
     host: "smtp.hostinger.com",
@@ -48,6 +24,22 @@ export async function POST(req: Request) {
 
     const body = await req.text();
     const signature = req.headers.get("stripe-signature");
+
+    type BookingData = {
+        id: string;
+        customer_name: string;
+        customer_phone: string;
+        customer_email: string;
+        service_names: string;
+        start_at: string;
+        end_at: string;
+        status: string;
+        appointment_notes: string;
+        customer_notes: string;
+        created_at: number;
+        booking_date: string;
+    }
+
 
     if (!signature) {
         return NextResponse.json(
@@ -83,7 +75,7 @@ export async function POST(req: Request) {
             customerEmail,
             listServices,
             selectedTime,
-            // endAt,
+            endAt,
             bookingStatus,
             appointmentNotes,
             customerNotes,
@@ -92,64 +84,49 @@ export async function POST(req: Request) {
 
         } = paymentIntent.metadata;
 
-        let endAt: string = "";
 
-        if (selectedTime?.includes("9:00")) {
-            // startAt = "9:00 AM";
-            endAt = calculateEndTimeToString(9 + totalHours);
-            // setEndAt(9 + totalHours);
+        const createdAt = Date.now();
+        const newBooking: BookingData = {
+            id: uniqueBookingID,
+            customer_name: customerName,
+            customer_phone: customerPhone,
+            customer_email: customerEmail,
+            service_names: listServices,
+            start_at: selectedTime,
+            end_at: endAt,
+            status: bookingStatus,
+            appointment_notes: appointmentNotes,
+            customer_notes: customerNotes,
+            created_at: createdAt,
+            booking_date: formattedDate
+        };
+
+        console.log("service ends at this time inside the webhook" + endAt);
+        try {
+            const res = await fetch('http://localhost:3000/api/appointments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newBooking),
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to create appointment');
+            }
+
+            const data = await res.json();
+            console.log("Success:", data);
+
+        } catch (err) {
+            console.log("Error:", err)
         }
-        else if (selectedTime?.includes("10:00")) {
-            // startAt = "10:00 AM";
-            endAt = calculateEndTimeToString(10 + totalHours);
-            // setStartAt(10);
-            // setEndAt(10 + totalHours);
-        }
-        else if (selectedTime?.includes("11:00")) {
-            // startAt = "11:00 AM";
-            endAt = calculateEndTimeToString(11 + totalHours);
-            // setStartAt(11);
-            // setEndAt(11 + totalHours);
-        }
-        else if (selectedTime?.includes("12:00")) {
-            // startAt = "12:00 PM";
-            endAt = calculateEndTimeToString(12 + totalHours);
-            // setStartAt(12);
-            // setEndAt(12 + totalHours);
-        }
-        else if (selectedTime?.includes("1:00")) {
-            // startAt = "1:00 PM";
-            endAt = calculateEndTimeToString(1 + totalHours);
-            // setStartAt(1);
-            // setEndAt(1 + totalHours);
-        }
-        else if (selectedTime?.includes("2:00")) {
-            // startAt = "2:00 PM";
-            endAt = calculateEndTimeToString(2 + totalHours);
-            // setStartAt(2);
-            // setEndAt(2 + totalHours);
-        }
-        else if (selectedTime?.includes("3:00")) {
-            // startAt = "3:00 PM";
-            endAt = calculateEndTimeToString(3 + totalHours);
-            // setStartAt(3);
-            // setEndAt(3 + totalHours);
-        }
-        else if (selectedTime?.includes("4:00")) {
-            // startAt = "4:00 PM";
-            endAt = calculateEndTimeToString(4 + totalHours);
-            // setStartAt(4);
-            // setEndAt(4 + totalHours);
-        }
+
 
         // Initiate booking creation time and unique booking ID 
-        const createdAt = Date.now();
-
-        addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, selectedTime, endAt, bookingStatus, appointmentNotes, customerNotes, createdAt, formattedDate);
-
-
-
-        console.log("metadata:", paymentIntent.metadata);
+        // note to self
+        // instead of calling it the bookingcontext logic, i just moved it over here instead bcause accessing the bookingcontext (client) from here is not allowed (server)
+        // addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, selectedTime, endAt, bookingStatus, appointmentNotes, customerNotes, createdAt, formattedDate);
 
         await transporter.sendMail({
             from: `"LuxxBeeBeauty" <${process.env.SMTP_USER}>`,
@@ -163,6 +140,73 @@ export async function POST(req: Request) {
         <p><strong>Booking ID:</strong> ${uniqueBookingID}</p>
       `,
         });
+
+        await transporter.sendMail({
+            from: `"LuxxBeeBeauty" <${process.env.SMTP_USER}>`,
+            // to: "luxxbeebeauty@gmail.com",
+            to: "business@luxxbeebeauty.com",
+            subject: "You have received a client booking",
+            html: `
+            <h2>Hi Eyrkah, a client has booked with you please review their details and the following service(s):</h2>
+           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222;">
+            <h2 style="text-align: center; color: #111;">Appointment Confirmed</h2>
+    <p>Thank you for booking with Luxxee Bee Beauty! Here are your appointment details:</p>
+  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+        Booking ID
+      </td>
+      <td style="border: 1px solid #ddd; padding: 12px;">
+        ${uniqueBookingID}
+      </td>
+    </tr>
+
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+        Date
+      </td>
+      <td style="border: 1px solid #ddd; padding: 12px;">
+        ${formattedDate}
+      </td>
+    </tr>
+
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+        Time
+      </td>
+      <td style="border: 1px solid #ddd; padding: 12px;">
+        ${selectedTime}
+      </td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+        Service(s)
+      </td>
+      <td style="border: 1px solid #ddd; padding: 12px;">
+        ${listServices}
+      </td>
+    </tr>
+
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+        Status
+      </td>
+      <td style="border: 1px solid #ddd; padding: 12px;">
+        Confirmed
+      </td>
+    </tr>
+  </table>
+
+  <p style="margin-top: 20px;">
+    If you have any questions, please reply to this email.
+  </p>
+
+  <p style="font-size: 12px; color: #777; text-align: center; margin-top: 30px;">
+    Luxxee Bee Beauty
+  </p>
+</div>`
+        });
+
     }
 
     return NextResponse.json({ received: true });

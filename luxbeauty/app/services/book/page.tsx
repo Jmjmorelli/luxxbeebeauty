@@ -52,88 +52,24 @@ export default function Book() {
     }
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-    // const [clientSecret, setClientSecret] = useState("");
-    // const [token, setToken] = useState();
-
-
-    // useEffect(() => {
-    //     fetch("/api/payment", { method: "POST" })
-    //         .then((res) => res.json())
-    //         .then((data) => setClientSecret(data.clientSecret));
-
-
-
-    //     // fetch('/api/docuseal', {
-    //     //     method: 'POST',
-    //     // })
-    //     //     .then((response) => response.json())
-    //     //     .then((data) => {
-    //     //         setToken(data.token);
-    //     //     });
-
-    // }, []);
-
-
-    const containerRef = useRef(null);
-
-    useEffect(() => {
-        let NutrientViewer: any;
-
-        async function loadPdf() {
-            const container = containerRef.current;
-            if (!container) return;
-
-            try {
-                NutrientViewer = (await import("@nutrient-sdk/viewer")).default;
-
-                NutrientViewer.unload(container);
-
-                await NutrientViewer.load({
-                    container,
-                    useCDN: true,
-                    document: "/documents/Eyelash-Extension-Consent-Form.pdf",
-                });
-
-                console.log("PDF loaded");
-            } catch (err) {
-                console.error("PDF failed to load:", err);
-            }
-        }
-
-        loadPdf();
-
-        return () => {
-            if (NutrientViewer && containerRef.current) {
-                NutrientViewer.unload(containerRef.current);
-            }
-        };
-    }, []);
-
-
-
-
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null); // <<<<<<<<<<<<<<<<<<<<<
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [bookedTimes, setBookedTimes] = useState<any[]>([]);
-
+    const [endTime, setEndTime] = useState<string>("");
+    let endAt: string = "";
 
     useEffect(() => {
         async function load() {
             const data = await fetchBookedDates();
             setBookedTimes(data);
+            console.log(data);
         }
-
         load();
+
     }, []);
 
 
-
-    // useEffect(() => {
-
-
-
-    // }, [selectedDate]);
 
     //cart logic
     const { cart } = useCart();
@@ -142,6 +78,22 @@ export default function Book() {
     const { clearCart } = useCart();
     const { checkCart } = useCart();
 
+
+
+    function calculateEndTimeToString(time: number) {
+        const hours = Math.floor(time);
+        const minutes = (time % 1) * 60;
+
+        const period = hours >= 12 ? "PM" : "AM";
+
+        let displayHour = hours % 12;
+        if (displayHour === 0) displayHour = 12;
+
+        const minuteStr = minutes === 0 ? "00" : minutes.toString();
+
+
+        return `${displayHour}:${minuteStr} ${period}`;
+    }
     // DETERMINE HOW LONG THE CLIENT SESSION WILL BE FOR BOOKING
 
     const totalMinutes = cart.reduce(
@@ -149,6 +101,45 @@ export default function Book() {
     );
 
     const totalHours = totalMinutes / 60;
+
+
+    useEffect(() => {
+        if (selectedTime?.includes("9:00")) {
+            setEndTime(calculateEndTimeToString(9 + totalHours));
+        }
+        else if (selectedTime?.includes("10:00")) {
+            setEndTime(calculateEndTimeToString(10 + totalHours));
+        }
+        else if (selectedTime?.includes("11:00")) {
+            setEndTime(calculateEndTimeToString(11 + totalHours));
+        }
+        else if (selectedTime?.includes("12:00")) {
+            setEndTime(calculateEndTimeToString(12 + totalHours));
+        }
+        else if (selectedTime?.includes("1:00")) {
+            setEndTime(calculateEndTimeToString(1 + totalHours));
+        }
+        else if (selectedTime?.includes("2:00")) {
+            setEndTime(calculateEndTimeToString(2 + totalHours));
+        }
+        else if (selectedTime?.includes("3:00")) {
+            setEndTime(calculateEndTimeToString(3 + totalHours));
+        }
+        else if (selectedTime?.includes("4:00")) {
+            setEndTime(calculateEndTimeToString(4 + totalHours));
+        }
+
+
+        // console.log(totalHours);
+        // console.log(totalMinutes);
+        // console.log(calculateEndTimeToString(totalHours + 9));
+        // console.log(cart);
+    }, [selectedTime]);
+
+    useEffect(() => {
+        setSelectedTime(null);
+
+    }, [selectedDate]);
 
     // bookingData vars
 
@@ -168,8 +159,6 @@ export default function Book() {
     const { addBooking } = useBooking();
 
 
-
- 
     function getCalendarDays(date: Date) {
         const year = date.getFullYear();
         const month = date.getMonth();
@@ -214,37 +203,20 @@ export default function Book() {
         );
     }
 
-    async function isTodayBooked() {
-        const bookedTimes = await fetchBookedDates();
-
-        for (let index = 0; index < bookedTimes.length; index++) {
-            console.log(bookedTimes[index]);
-        }
-        console.log(selectedDate);
-    }
-
-    function isSameDay(date1: Date, date2: Date) {
-        return (
-            date1.getFullYear() === date2.getFullYear() &&
-            date1.getMonth() === date2.getMonth() &&
-            date1.getDate() === date2.getDate()
-        );
-    }
-
     function convertToDashFormat(dateStr: string) {
-        const parts = dateStr.split(" ");
+        const [month, day, year] = dateStr.split("/");
 
-        const monthMap: Record<string, string> = {
-            Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-            May: "05", Jun: "06", Jul: "07", Aug: "08",
-            Sep: "09", Oct: "10", Nov: "11", Dec: "12",
-        };
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
 
-        const month = monthMap[parts[1]];
-        const day = parts[2].padStart(2, "0");
-        const year = parts[3];
+    function timeToNumber(time: string) {
+        const [clock, period] = time.split(" ");
+        let [hours, minutes] = clock.split(":").map(Number);
 
-        return `${year}-${month}-${day}`;
+        if (period === "PM" && hours !== 12) hours += 12;
+        if (period === "AM" && hours === 12) hours = 0;
+
+        return hours + minutes / 60;
     }
 
     function isTimeUnavailable(
@@ -260,18 +232,23 @@ export default function Book() {
 
         if (!formattedDate) return false;
 
-
+        console.log(bookedTimes);
         return bookedTimes.some((booking) => {
-            // console.log("seeing FORMAT!!" + booking.date);
             const bookingDate = convertToDashFormat(booking.date);
 
-            // console.log(formattedDate);
-            // console.log(bookingDate);
+            // console.log("booking date in DB: " + bookingDate);
+            // console.log("selecting for this date: " + formattedDate);
             // console.log(booking.startTime);
-            return (
+            // console.log(time);
 
+            const selectedTimeNumber = timeToNumber(time);
+            const startTimeNumber = timeToNumber(booking.startTime);
+            const endTimeNumber = timeToNumber(booking.endTime);
+
+             return (
                 bookingDate === formattedDate &&
-                booking.startTime === time
+                selectedTimeNumber >= startTimeNumber &&
+                selectedTimeNumber < endTimeNumber
             );
         });
     }
@@ -439,16 +416,17 @@ export default function Book() {
                                     }}
                                 >
                                     <CheckoutPage amount={amount}
-                                    uniqueBookingID={crypto.randomUUID()}
-                                    customerEmail={customerEmail} 
-                                    formattedDate={selectedDate.toLocaleDateString()}
-                                    selectedTime={selectedTime}
-                                    customerName={customerName}
-                                    customerPhone={customerPhone}
-                                    customerNotes={customerNotes}
-                                    listServices={JSON.stringify(cart)}
-                                    bookingStatus={"confirmed"}
-                                    appointmentNotes={"empty"}
+                                        uniqueBookingID={crypto.randomUUID()}
+                                        customerEmail={customerEmail}
+                                        formattedDate={selectedDate.toLocaleDateString()}
+                                        selectedTime={selectedTime}
+                                        customerName={customerName}
+                                        customerPhone={customerPhone}
+                                        customerNotes={customerNotes}
+                                        listServices={JSON.stringify(cart)}
+                                        bookingStatus={"confirmed"}
+                                        appointmentNotes={"empty"}
+                                        endAt={endTime}
                                     />
                                 </Elements>
                             </div>

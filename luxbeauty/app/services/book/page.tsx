@@ -9,7 +9,7 @@ import { ConsoleLogWriter } from "drizzle-orm";
 import { json } from "stream/consumers";
 import { endpointClientChangedSubscribe } from "next/dist/build/swc/generated-native";
 import { convertIndexToString, date } from "drizzle-orm/mysql-core";
-import { createAppointment } from "@/app/actions";
+// import { createAppointment } from "@/app/actions";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutPage from "@/app/components/CheckoutPage";
@@ -63,7 +63,7 @@ export default function Book() {
         async function load() {
             const data = await fetchBookedDates();
             setBookedTimes(data);
-            console.log(data);
+            // console.log(data);
         }
         load();
 
@@ -232,7 +232,7 @@ export default function Book() {
 
         if (!formattedDate) return false;
 
-        console.log(bookedTimes);
+        // console.log(bookedTimes);
         return bookedTimes.some((booking) => {
             const bookingDate = convertToDashFormat(booking.date);
 
@@ -245,7 +245,7 @@ export default function Book() {
             const startTimeNumber = timeToNumber(booking.startTime);
             const endTimeNumber = timeToNumber(booking.endTime);
 
-             return (
+            return (
                 bookingDate === formattedDate &&
                 selectedTimeNumber >= startTimeNumber &&
                 selectedTimeNumber < endTimeNumber
@@ -387,7 +387,8 @@ export default function Book() {
                                     <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="email" placeholder="E-mail" type="email"
                                         onChange={(e) =>
                                             setCustomerEmail(e.target.value)
-                                        } />
+                                        } required
+                                    />
                                     <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="customerNotes" placeholder="Comments/Requests" type="text"
                                         onChange={(e) =>
                                             setCustomerNotes(e.target.value)
@@ -405,7 +406,7 @@ export default function Book() {
 
 
                         {
-                            selectedDate && selectedTime &&
+                            selectedDate && selectedTime && customerName && customerPhone && customerEmail &&
                             <div style={{ margin: "1rem" }}>
                                 <Elements
                                     stripe={stripePromise}

@@ -6,9 +6,6 @@ import checkmark from "@/app/images/greenCheck.png"
 
 
 export default function PaymentSuccess() {
-    const searchParams = useSearchParams();
-    // const amount = searchParams.get("amount");
-    // const uniqueID = searchParams.get("id");
 
     return (
         <main className="max-w-6xl mx-auto p-10 text-white text-center border m-10 rounded-md bg-gradient-to-tr from-blue-500 to-purple-500">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState } from "react-dom";
-import { createAppointment } from "../actions";
+// import { createAppointment } from "../actions";
 
 import BottomSheetNav from "../components/BottomSheetNav"
 import { db } from "../db"
@@ -10,7 +10,7 @@ import { useActionState } from "react";
 
 export default function Policies() {
 
-  const [state, formAction] = useActionState(createAppointment, null);
+  // const [state, formAction] = useActionState(createAppointment, null);
 
 
   return (

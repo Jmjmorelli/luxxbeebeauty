@@ -6,36 +6,10 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: luxbeauty
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build app
-        run: npm run build
-        env: 
-            STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-            STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-            SMTP_USER: ${{ secrets.SMTP_USER }}
-            SMTP_PASS: ${{ secrets.SMTP_PASS }}
-            TURSO_CONNECTION_URL: ${{ secrets.TURSO_CONNECTION_URL }}
-            TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-            NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}}
-
       - name: Prepare SSH key
         run: |
           mkdir -p ~/.ssh
@@ -43,35 +17,19 @@ jobs:
           chmod 600 ~/.ssh/ec2_key
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Clean old deploy files
+      - name: Deploy on EC2
         run: |
           ssh -i ~/.ssh/ec2_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
-            mkdir -p /var/www/luxbeauty &&
-            rm -rf /var/www/luxbeauty/.next &&
-            rm -rf /var/www/luxbeauty/public &&
-            rm -rf /var/www/luxbeauty/node_modules &&
-            rm -f /var/www/luxbeauty/server.js &&
-            rm -f /var/www/luxbeauty/package.json
-          "
+            set -e
 
-      - name: Upload standalone server
-        run: |
-          scp -i ~/.ssh/ec2_key -r .next/standalone/* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/luxbeauty/
+            cd /var/www/luxxbeebeauty
+            git pull origin main
 
-      - name: Upload static files
-        run: |
-          ssh -i ~/.ssh/ec2_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p /var/www/luxbeauty/.next/static"
-          scp -i ~/.ssh/ec2_key -r .next/static/* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/luxbeauty/.next/static/
+            cd luxbeauty
+            npm install
+            npm run build
 
-      - name: Upload public folder
-        run: |
-          scp -i ~/.ssh/ec2_key -r public ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/luxbeauty/public
-
-      - name: Install Linux runtime dependencies and restart PM2
-        run: |
-          ssh -i ~/.ssh/ec2_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
-            cd /var/www/luxbeauty &&
-            npm install --omit=dev &&
-            pm2 restart luxbeauty || pm2 start server.js --name luxbeauty &&
+            pm2 delete luxbeauty || true
+            pm2 start npm --name luxbeauty -- start
             pm2 save
           "

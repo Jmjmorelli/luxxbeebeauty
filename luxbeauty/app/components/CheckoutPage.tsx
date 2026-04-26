@@ -77,7 +77,7 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
 
 
 
-    }, [amount, customerEmail]);
+    }, [amount, customerEmail, customerNotes]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

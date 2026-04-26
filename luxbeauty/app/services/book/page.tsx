@@ -439,12 +439,16 @@ export default function Book() {
                                     }}
                                 >
                                     <CheckoutPage amount={amount}
+                                    uniqueBookingID={crypto.randomUUID()}
                                     customerEmail={customerEmail} 
                                     formattedDate={selectedDate.toLocaleDateString()}
                                     selectedTime={selectedTime}
                                     customerName={customerName}
                                     customerPhone={customerPhone}
                                     customerNotes={customerNotes}
+                                    listServices={JSON.stringify(cart)}
+                                    bookingStatus={"confirmed"}
+                                    appointmentNotes={"empty"}
                                     />
                                 </Elements>
                             </div>

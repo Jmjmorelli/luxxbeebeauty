@@ -27,6 +27,13 @@ jobs:
 
       - name: Build app
         run: npm run build
+        env: 
+            STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+            STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+            SMTP_USER: ${{ secrets.SMTP_USER }}
+            SMTP_PASS: ${{ secrets.SMTP_PASS }}
+            TURSO_CONNECTION_URL: ${{ secrets.TURSO_CONNECTION_URL }}
+            TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
 
       - name: Prepare SSH key
         run: |

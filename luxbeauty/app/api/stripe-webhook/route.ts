@@ -150,7 +150,7 @@ export async function POST(req: Request) {
             <h2>Hi Eyrkah, a client has booked with you please review their details and the following service(s):</h2>
            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222;">
             <h2 style="text-align: center; color: #111;">Appointment Confirmed</h2>
-    <p>Thank you for booking with Luxxee Bee Beauty! Here are your appointment details:</p>
+    <p>Thank you for booking with LuxxBeeBeauty! Here are your appointment details:</p>
   <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
     <tr>
       <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
@@ -202,7 +202,7 @@ export async function POST(req: Request) {
   </p>
 
   <p style="font-size: 12px; color: #777; text-align: center; margin-top: 30px;">
-    Luxxee Bee Beauty
+    LuxxBeeBeauty
   </p>
 </div>`
     });

@@ -97,7 +97,10 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
             return;
         }
 
-        const returnUrl = new URL("http://localhost:3000/payment-success");
+        // if (!process.env.NEXT_PUBLIC_BASE_URL)
+        //     return;
+
+        const returnUrl = new URL("https://luxxbeebeauty.com/payment-success");
         // returnUrl.searchParams.set("id", uniqueBookingID);
 
         const { error } = await stripe.confirmPayment({

@@ -129,6 +129,20 @@ export async function POST(req: Request) {
     // instead of calling it the bookingcontext logic, i just moved it over here instead bcause accessing the bookingcontext (client) from here is not allowed (server)
     // addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, selectedTime, endAt, bookingStatus, appointmentNotes, customerNotes, createdAt, formattedDate);
 
+
+    const services = JSON.parse(listServices);
+
+    const servicesHTML = services
+      .map((service: any) => {
+        return `
+      <div>
+        <strong>${service.name}</strong> (${service.duration} mins)
+      </div>
+    `;
+      })
+      .join("");
+
+
     await transporter.sendMail({
       from: `"LuxxBeeBeauty" <${process.env.SMTP_USER}>`,
       to: customerEmail,
@@ -179,12 +193,13 @@ export async function POST(req: Request) {
         ${selectedTime}
       </td>
     </tr>
+
     <tr>
       <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
-        Service(s)
+        Service(s) 
       </td>
       <td style="border: 1px solid #ddd; padding: 12px;">
-        ${listServices}
+        ${servicesHTML}
       </td>
     </tr>
 
@@ -194,6 +209,15 @@ export async function POST(req: Request) {
       </td>
       <td style="border: 1px solid #ddd; padding: 12px;">
         Confirmed
+      </td>
+    </tr>
+
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+        Customer Notes/Requests
+      </td>
+      <td style="border: 1px solid #ddd; padding: 12px;">
+        ${customerNotes}
       </td>
     </tr>
   </table>

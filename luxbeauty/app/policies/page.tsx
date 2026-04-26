@@ -7,52 +7,65 @@ import BottomSheetNav from "../components/BottomSheetNav"
 import { db } from "../db"
 import { appointmentsTable } from "../db/schema"
 import { useActionState } from "react";
+import styles from "./page.module.css"
+
 
 export default function Policies() {
 
-  // const [state, formAction] = useActionState(createAppointment, null);
+  const policies = [
+    {
+      title: "Deposit",
+      text: "A $20 deposit is required to book your appointment.",
+    },
+    {
+      title: "Cancellations & Rescheduling",
+      text: "If you need to cancel or reschedule, please let me know at least 48 hours before your appointment. Anything later may be subject to a fee depending on the situation.",
+    },
+    {
+      title: "Foreign Fills",
+      text: "Foreign fills will incur a $40 fee.",
+    },
+    {
+      title: "Squeeze-In Appointments",
+      text: "Any appointment not listed on my schedule is considered a squeeze-in and will include a $40 fee.",
+    },
+    {
+      title: "Fill Appointments",
+      text: "Fill appointments require at least 40% of lashes remaining on each eye. Anything less will be priced as a full set.",
+    },
+    {
+      title: "Grace Period",
+      text: "A 10-minute grace period is provided. After 10 minutes, a $15 late fee may apply.",
+    },
+    {
+      title: "Guests",
+      text: "You may bring a guest, but please let me know before your appointment.",
+    },
 
+  ];
 
   return (
     <div >
-      <div style={{ padding: "1rem" }}>
-        Deposit $20
-      </div>
-      <div style={{ padding: "1rem" }}>
-        You can bring a guest, just let me know before your appointment
-      </div>
-      <div style={{ padding: "1rem" }}>
-        If there is any issues with your appt, let me know 48 hours prior. Anything later is subject to a fee depending on the state of my work.
-      </div>
-      <div style={{ padding: "1rem" }}>
-        I will provide a 10 minute grace period, anything later, a possible late fee ($15)
-      </div>
-      <div style={{ padding: "1rem" }}>
-        For FILL APTs, require 40% of lashes remaining on each eye. Anything less will be priced as a full set.
-      </div>
-      <div style={{ padding: "1rem" }}>
-        Foreign Fills will incur $40 fee
-      </div>
-      <div style={{ padding: "1rem" }}>
-        Any appt not listed on my schedule is a squeeze in,  $40 fee
+      <div className={styles.policiesPage}>
+        <section className={styles.policiesHero}>
+          <h1>Booking Policies</h1>
+          <p>
+            Please review all policies before booking your appointment.
+          </p>
+        </section>
+
+        <section className={styles.policiesGrid}>
+          {policies.map((policy) => (
+            <div className={styles.policyCard} key={policy.title}>
+              <h2>{policy.title}</h2>
+              <p>{policy.text}</p>
+            </div>
+          ))}
+        </section>
       </div>
 
-
-      {/* <form action={formAction}>
-        <input type="text" name="customer_name" placeholder="Name" />
-        <input type="text" name="customer_phone" placeholder="Phone" />
-        <input type="email" name="customer_email" placeholder="Email" />
-
-        <button type="submit">Submit</button>
-
-        {state?.message && (
-          <p>{state.message}</p>
-        )}
-      </form> */}
-
-
-
-
+      {/* give space for the menu button  */}
+      <div style={{ marginTop: "2rem" }}> </div>
 
 
       <BottomSheetNav />

@@ -262,3 +262,167 @@
     }
 
 }
+
+.productCard {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  width: 18rem;
+  height: auto;
+  border-radius: 6px;
+  padding: 1rem 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.price {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #1f2937;
+  padding-bottom: 0.5rem;
+}
+
+.productName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.productDescription {
+  font-size: 0.875rem;
+  color: #6b7280;
+  padding-bottom: 0.75rem;
+}
+
+.lastUpdateRow {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.editAction,
+.deleteAction {
+  display: flex;
+  gap: 0.5rem;
+  color: #4b5563;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.editAction:hover,
+.deleteAction:hover {
+  transform: scale(1.1);
+}
+
+.icon {
+  width: 1.5rem;
+}
+
+.editAction .icon {
+  stroke: #15803d;
+}
+
+.deleteAction .icon {
+  stroke: #b91c1c;
+}
+
+.editButton {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #15803d;
+}
+
+.deleteButton {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #b91c1c;
+}
+
+:root {
+  --accent: rgb(198, 153, 134);
+}
+
+.cartContainer {
+  max-width: 750px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+
+.cartTitle {
+  text-align: center;
+  color: var(--accent);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.cartTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cartTable th {
+  text-align: left;
+  color: #555;
+  font-size: 0.9rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.cartTable td {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f1f1f1;
+  color: #111;
+}
+
+.serviceName {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.serviceDescription {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  color: red;
+}
+
+.cartSummary {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin: 1rem 0;
+  color: #111;
+}
+
+.checkoutButton {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}

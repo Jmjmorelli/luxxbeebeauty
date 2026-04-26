@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
             },
         });
 
+        console.log("api payment status");
 
         return NextResponse.json({ clientSecret: paymentIntent.client_secret })
     } catch (error) {

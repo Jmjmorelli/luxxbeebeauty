@@ -103,7 +103,7 @@ export async function POST(req: Request) {
 
     console.log("service ends at this time inside the webhook" + endAt);
     try {
-      const res = await fetch('http://localhost:3000/api/appointments', {
+      const res = await fetch('https://luxxbeebeauty.com/api/appointments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -84,14 +84,14 @@
     }
 
     .timeBtn:hover {
-        background: #f3f3f3;
-        border-color: #999;
+        background: #fff;
+        border-color: rgb(198, 153, 134);
     }
 
     .timeBtn.active {
-        background: #000;
+        background: rgb(198, 153, 134);
+        border-color: rgb(198, 153, 134);
         color: white;
-        border-color: #000;
     }
 
     .dateRow {
@@ -262,14 +262,14 @@
     }
 
     .timeBtn:hover {
-        background: #f3f3f3;
-        border-color: #999;
+        background: #fff;
+        border-color: rgb(198, 153, 134);
     }
 
     .timeBtn.active {
-        background: #000;
+        background: rgb(198, 153, 134);
+        border-color: rgb(198, 153, 134);
         color: white;
-        border-color: #000;
     }
 
 

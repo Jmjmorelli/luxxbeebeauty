@@ -148,8 +148,23 @@ export default function Book() {
     const [customerPhone, setCustomerPhone] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
     const [customerNotes, setCustomerNotes] = useState("");
-
+    const [validEmail, setValidEmail] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+
+    useEffect(() => {
+        function isValidEmail(value: unknown): value is string {
+            return (
+                typeof value === "string" &&
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+            );
+        }
+
+        if (isValidEmail(customerEmail))
+            setValidEmail(true);
+        else
+            setValidEmail(false);
+        
+    }, [customerEmail]);
 
 
     // booking logic
@@ -277,7 +292,7 @@ export default function Book() {
                 </div>
                 <div>
                     <div className={styles.container}>
-                        <div className="datePicker" style={{ paddingTop: "2rem", marginLeft: "1rem", color: "black" }}>
+                        <div className="datePicker" style={{ paddingTop: "2rem", marginLeft: "1rem", color: "black", fontWeight: "bold" }}>
                             When would you like to book your appointment?
                         </div>
 
@@ -326,17 +341,22 @@ export default function Book() {
                             </div>
                         </div>
 
-
+                        {/* 
                         {
                             selectedDate &&
-                            <div style={{ marginLeft: "1rem", color: "green", fontWeight: "bold" }}>
+                            <div style={{ marginRight: "3rem", color: "rgb(198, 153, 134)", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
                                 {selectedDate.toLocaleDateString()}
                             </div>
-                        }
+                        } */}
                         {
                             selectedDate &&
-                            <div style={{ marginLeft: "1rem", color: "black" }}>
-                                What time?
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div style={{ marginLeft: "1rem", color: "black", fontWeight: "bold" }}>
+                                    What time?
+                                </div>
+                                <div style={{ marginRight: "1rem", color: "black", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
+                                    {selectedDate.toLocaleDateString()}
+                                </div>
                             </div>
                         }
 
@@ -376,20 +396,23 @@ export default function Book() {
                             selectedDate && selectedTime &&
                             <section>
                                 <form className={styles.feedForm} action="#">
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} placeholder="Name" type="text"
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} placeholder="Name" type="text"
                                         onChange={(e) =>
                                             setCustomerName(e.target.value)
                                         } />
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="phone" placeholder="Phone number"
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="phone" placeholder="Phone number"
                                         onChange={(e) =>
                                             setCustomerPhone(e.target.value)
                                         } />
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="email" placeholder="E-mail" type="email"
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="email" placeholder="*Please enter a valid email" type="email"
                                         onChange={(e) =>
                                             setCustomerEmail(e.target.value)
                                         } required
                                     />
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px" }} name="customerNotes" placeholder="Comments/Requests" type="text"
+                                    {/* <div style={{ textAlign: "center", color: "rgb(198, 153, 134)", marginBottom: "1rem" }}>
+                                    *Please enter a valid email
+                                    </div> */}
+                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="customerNotes" placeholder="Comments/Requests" type="text"
                                         onChange={(e) =>
                                             setCustomerNotes(e.target.value)
                                         } />
@@ -398,16 +421,11 @@ export default function Book() {
                         }
 
                         {
-                            selectedDate && selectedTime &&
-                            <div style={{ paddingTop: "2rem", marginLeft: "1rem" }}>
+                            selectedDate && selectedTime && customerName && customerPhone && customerEmail && validEmail &&
+                            <div style={{ margin: "1rem" }}>
+                                 <div style={{ paddingTop: "1rem", marginLeft: "1rem",marginBottom: "1rem" }}>
                                 *As per policy, a $20 fee is required to secure your booking
                             </div>
-                        }
-
-
-                        {
-                            selectedDate && selectedTime && customerName && customerPhone && customerEmail &&
-                            <div style={{ margin: "1rem" }}>
                                 <Elements
                                     stripe={stripePromise}
                                     options={{

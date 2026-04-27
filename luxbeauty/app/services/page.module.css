@@ -1,6 +1,4 @@
-.testing {
-    font-size: 500px;
-}
+
 
 .appointmentPage {
     padding-left: 5rem;
@@ -400,13 +398,10 @@
 .removeButton {
   background: none;
   border: none;
-  color: #999;
+  color: red;
   cursor: pointer;
 }
 
-.removeButton:hover {
-  color: red;
-}
 
 .cartSummary {
   display: flex;

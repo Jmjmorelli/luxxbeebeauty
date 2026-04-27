@@ -163,7 +163,7 @@ export default function Book() {
             setValidEmail(true);
         else
             setValidEmail(false);
-        
+
     }, [customerEmail]);
 
 
@@ -282,198 +282,200 @@ export default function Book() {
     return (
 
         <div className="body-wrap boxed-container">
-            <div className={styles.bookingWrapper}>
-                <div className={styles.returnBtn}
-                    style={{ position: "fixed", display: "flex", margin: "1rem", color: "white", borderRadius: "10px", backgroundColor: "black", zIndex: "1000", bottom: "0", justifyContent: "center", alignItems: "center" }}
-                >
-                    <Link href="/services/" style={{ color: "white" }}>
-                        Return to Services
-                    </Link>
-                </div>
-                <div>
-                    <div className={styles.container}>
-                        <div className="datePicker" style={{ paddingTop: "2rem", marginLeft: "1rem", color: "black", fontWeight: "bold" }}>
-                            When would you like to book your appointment?
-                        </div>
 
-                        <div className="calendar">
-                            <div className="calendar__month">
-                                <div className="cal-month__previous" onClick={handlePreviousMonth}>Prev</div>
-                                <div className="cal-month__current">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</div>
-                                <div className="cal-month__next" onClick={handleNextMonth}>Next</div>
+            {cart.length > 0 &&
+                <div className={styles.bookingWrapper}>
+                    <div className={styles.returnBtn}
+                        style={{ position: "fixed", display: "flex", margin: "1rem", color: "white", borderRadius: "10px", backgroundColor: "black", zIndex: "1000", bottom: "0", justifyContent: "center", alignItems: "center" }}
+                    >
+                        <Link href="/services/" style={{ color: "white" }}>
+                            Return to Services
+                        </Link>
+                    </div>
+                    <div>
+                        <div className={styles.container}>
+                            <div className="datePicker" style={{ paddingTop: "2rem", marginLeft: "1rem", color: "black", fontWeight: "bold" }}>
+                                When would you like to book your appointment?
                             </div>
-                            <div className="calendar__head">
-                                {dayNames.map((day) => (
-                                    <div key={day} className="cal-head__day">
-                                        {day}
-                                    </div>
-                                ))}
+
+                            <div className="calendar">
+                                <div className="calendar__month">
+                                    <div className="cal-month__previous" onClick={handlePreviousMonth}>Prev</div>
+                                    <div className="cal-month__current">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</div>
+                                    <div className="cal-month__next" onClick={handleNextMonth}>Next</div>
+                                </div>
+                                <div className="calendar__head">
+                                    {dayNames.map((day) => (
+                                        <div key={day} className="cal-head__day">
+                                            {day}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="calendar__body">
+                                    {calendarDays.map((day, index) => {
+
+                                        const available = isTodayAvailable(day)
+                                        const isSelected =
+                                            !!day &&
+                                            !!selectedDate &&
+                                            day.toDateString() === selectedDate.toDateString();
+
+                                        if (available) {
+
+                                            return (
+                                                <div className={isSelected ? 'cal-body__daySelected' : 'cal-body__day'} key={index} onClick={() => {
+                                                    setSelectedDate(day);
+                                                }
+                                                }>
+                                                    {day ? day.getDate() : ""}
+                                                </div>
+                                            );
+                                        }
+                                        else {
+                                            return (
+
+                                                <div className="cal-body__dayDisabled" key={index}>
+                                                    {day ? day.getDate() : ""}
+                                                </div>
+                                            );
+                                        }
+                                    })}
+                                </div>
                             </div>
-                            <div className="calendar__body">
-                                {calendarDays.map((day, index) => {
 
-                                    const available = isTodayAvailable(day)
-                                    const isSelected =
-                                        !!day &&
-                                        !!selectedDate &&
-                                        day.toDateString() === selectedDate.toDateString();
-
-                                    if (available) {
-
-                                        return (
-                                            <div className={isSelected ? 'cal-body__daySelected' : 'cal-body__day'} key={index} onClick={() => {
-                                                setSelectedDate(day);
-                                            }
-                                            }>
-                                                {day ? day.getDate() : ""}
-                                            </div>
-                                        );
-                                    }
-                                    else {
-                                        return (
-
-                                            <div className="cal-body__dayDisabled" key={index}>
-                                                {day ? day.getDate() : ""}
-                                            </div>
-                                        );
-                                    }
-                                })}
-                            </div>
-                        </div>
-
-                        {/* 
+                            {/* 
                         {
                             selectedDate &&
                             <div style={{ marginRight: "3rem", color: "rgb(198, 153, 134)", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
                                 {selectedDate.toLocaleDateString()}
                             </div>
                         } */}
-                        {
-                            selectedDate &&
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <div style={{ marginLeft: "1rem", color: "black", fontWeight: "bold" }}>
-                                    What time?
+                            {
+                                selectedDate &&
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <div style={{ marginLeft: "1rem", color: "black", fontWeight: "bold" }}>
+                                        What time?
+                                    </div>
+                                    <div style={{ marginRight: "1rem", color: "black", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
+                                        {selectedDate.toLocaleDateString()}
+                                    </div>
                                 </div>
-                                <div style={{ marginRight: "1rem", color: "black", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
-                                    {selectedDate.toLocaleDateString()}
-                                </div>
+                            }
+
+
+                            <div className={styles.timeGrid} style={{ paddingTop: "1rem" }}>
+                                {[
+                                    "9:00 AM", "10:00 AM",
+                                    "11:00 AM", "12:00 PM",
+                                    "1:00 PM", "2:00 PM",
+                                    "3:00 PM", "4:00 PM"
+                                ].map((time) => {
+                                    if (!selectedDate) return false;
+
+                                    const unavailable = isTimeUnavailable(time, selectedDate, bookedTimes);
+
+                                    return (
+                                        <button
+                                            key={time}
+                                            className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
+                                            disabled={unavailable}
+                                            onClick={() => {
+                                                if (!unavailable) {
+                                                    setSelectedTime(time);
+                                                }
+                                                else setSelectedTime(null);
+                                            }}
+                                        >
+                                            {unavailable ? `Unavailable` : time}
+                                        </button>
+                                    );
+                                })}
                             </div>
-                        }
-
-
-                        <div className={styles.timeGrid} style={{ paddingTop: "1rem" }}>
-                            {[
-                                "9:00 AM", "10:00 AM",
-                                "11:00 AM", "12:00 PM",
-                                "1:00 PM", "2:00 PM",
-                                "3:00 PM", "4:00 PM"
-                            ].map((time) => {
-                                if (!selectedDate) return false;
-
-                                const unavailable = isTimeUnavailable(time, selectedDate, bookedTimes);
-
-                                return (
-                                    <button
-                                        key={time}
-                                        className={`${styles.timeBtn} ${selectedTime === time ? styles.active : ""}`}
-                                        disabled={unavailable}
-                                        onClick={() => {
-                                            if (!unavailable) {
-                                                setSelectedTime(time);
-                                            }
-                                            else setSelectedTime(null);
-                                        }}
-                                    >
-                                        {unavailable ? `Unavailable` : time}
-                                    </button>
-                                );
-                            })}
-                        </div>
 
 
 
-                        {
-                            selectedDate && selectedTime &&
-                            <section>
-                                <form className={styles.feedForm} action="#">
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} placeholder="Name" type="text"
-                                        onChange={(e) =>
-                                            setCustomerName(e.target.value)
-                                        } />
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="phone" placeholder="Phone number"
-                                        onChange={(e) =>
-                                            setCustomerPhone(e.target.value)
-                                        } />
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="email" placeholder="*Please enter a valid email" type="email"
-                                        onChange={(e) =>
-                                            setCustomerEmail(e.target.value)
-                                        } required
-                                    />
-                                    {/* <div style={{ textAlign: "center", color: "rgb(198, 153, 134)", marginBottom: "1rem" }}>
+                            {
+                                selectedDate && selectedTime &&
+                                <section>
+                                    <form className={styles.feedForm} action="#">
+                                        <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} placeholder="Name" type="text"
+                                            onChange={(e) =>
+                                                setCustomerName(e.target.value)
+                                            } />
+                                        <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="phone" placeholder="Phone number"
+                                            onChange={(e) =>
+                                                setCustomerPhone(e.target.value)
+                                            } />
+                                        <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="email" placeholder="*Please enter a valid email" type="email"
+                                            onChange={(e) =>
+                                                setCustomerEmail(e.target.value)
+                                            } required
+                                        />
+                                        {/* <div style={{ textAlign: "center", color: "rgb(198, 153, 134)", marginBottom: "1rem" }}>
                                     *Please enter a valid email
                                     </div> */}
-                                    <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="customerNotes" placeholder="Comments/Requests" type="text"
-                                        onChange={(e) =>
-                                            setCustomerNotes(e.target.value)
-                                        } />
-                                </form>
-                            </section>
-                        }
+                                        <input style={{ textAlign: "center", border: "1px solid #ccc", borderRadius: "10px", borderColor: "rgb(198, 153, 134)", color: "rgb(198, 153, 134)" }} name="customerNotes" placeholder="Comments/Requests" type="text"
+                                            onChange={(e) =>
+                                                setCustomerNotes(e.target.value)
+                                            } />
+                                    </form>
+                                </section>
+                            }
 
-                        {
-                            selectedDate && selectedTime && customerName && customerPhone && customerEmail && validEmail &&
-                            <div style={{ margin: "1rem" }}>
-                                 <div style={{ paddingTop: "1rem", marginLeft: "1rem",marginBottom: "1rem" }}>
-                                *As per policy, a $20 fee is required to secure your booking
+                            {
+                                selectedDate && selectedTime && customerName && customerPhone && customerEmail && validEmail &&
+                                <div style={{ margin: "1rem" }}>
+                                    <div style={{ paddingTop: "1rem", marginLeft: "1rem", marginBottom: "1rem" }}>
+                                        *As per policy, a $20 fee is required to secure your booking
+                                    </div>
+                                    <Elements
+                                        stripe={stripePromise}
+                                        options={{
+                                            mode: "payment",
+                                            amount: 2000,
+                                            currency: "usd",
+                                        }}
+                                    >
+                                        <CheckoutPage amount={amount}
+                                            uniqueBookingID={crypto.randomUUID()}
+                                            customerEmail={customerEmail}
+                                            formattedDate={selectedDate.toLocaleDateString()}
+                                            selectedTime={selectedTime}
+                                            customerName={customerName}
+                                            customerPhone={customerPhone}
+                                            customerNotes={customerNotes}
+                                            listServices={JSON.stringify(cart)}
+                                            bookingStatus={"confirmed"}
+                                            appointmentNotes={"empty"}
+                                            endAt={endTime}
+                                        />
+                                    </Elements>
+                                </div>
+                            }
+
+                            <div style={{ paddingTop: "2rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                                Please note some services may not be available at certain times, due to the length of the service.
                             </div>
-                                <Elements
-                                    stripe={stripePromise}
-                                    options={{
-                                        mode: "payment",
-                                        amount: 2000,
-                                        currency: "usd",
-                                    }}
-                                >
-                                    <CheckoutPage amount={amount}
-                                        uniqueBookingID={crypto.randomUUID()}
-                                        customerEmail={customerEmail}
-                                        formattedDate={selectedDate.toLocaleDateString()}
-                                        selectedTime={selectedTime}
-                                        customerName={customerName}
-                                        customerPhone={customerPhone}
-                                        customerNotes={customerNotes}
-                                        listServices={JSON.stringify(cart)}
-                                        bookingStatus={"confirmed"}
-                                        appointmentNotes={"empty"}
-                                        endAt={endTime}
-                                    />
-                                </Elements>
+
+                            <div style={{ paddingTop: "1rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                                If you have any questions about booking, please reach out to me via DM! Thank you!
                             </div>
-                        }
 
-                        <div style={{ paddingTop: "2rem", marginLeft: "1rem", marginRight: "1rem" }}>
-                            Please note some services may not be available at certain times, due to the length of the service.
-                        </div>
-
-                        <div style={{ paddingTop: "1rem", marginLeft: "1rem", marginRight: "1rem" }}>
-                            If you have any questions about booking, please reach out to me via DM! Thank you!
-                        </div>
-
-                        <div style={{ paddingTop: "1rem", marginLeft: "1rem", marginRight: "1rem" }}>
-                            Electronic consent forms coming soon.
-                        </div>
-                        {/* 
+                            <div style={{ paddingTop: "1rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                                Electronic consent forms coming soon.
+                            </div>
+                            {/* 
                         <div style={{ margin: "auto", display: "flex", justifyContent: "center", marginTop: "3rem", marginBottom: "5rem" }}>
                             <button className={styles.nextBtn}
                                 onClick={() => initializeBookingData()}>Proceed</button>
                         </div> */}
 
 
-                        <div style={{ marginBottom: "8rem" }}>
+                            <div style={{ marginBottom: "8rem" }}>
 
-                        </div>
+                            </div>
 
-                        {/* <SignaturePad
+                            {/* <SignaturePad
                             name="Joseph Morelli"
                             onSigned={(pdfUrl) => {
                                 window.open(pdfUrl, "_blank");
@@ -481,9 +483,24 @@ export default function Book() {
                         /> */}
 
 
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+
+            {cart.length <= 0 &&
+                <div>
+                    <div style={{ paddingTop: "2rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                        That's strange, it seems like you are trying to book with no services.
+                    </div>
+                    <div style={{ paddingTop: "2rem", marginLeft: "1rem", marginRight: "1rem" }}>
+                        That is like going to the gas station and paying for air.
+                    </div>
+                </div>
+
+            }
+
+
         </div >
 
     );

@@ -23,10 +23,12 @@ jobs:
             set -e
 
             cd /var/www/luxxbeebeauty
-            git pull origin main
+            git fetch origin
+            git checkout main
+            git reset --hard origin/main
 
             cd luxbeauty
-            npm install
+            npm ci
             npm run build
 
             pm2 delete luxbeauty || true

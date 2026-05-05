@@ -352,14 +352,23 @@ export default function Book() {
                         } */}
                             {
                                 selectedDate &&
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                    <div style={{ marginLeft: "1rem", color: "black", fontWeight: "bold" }}>
+                                <div className={styles.feedForm} style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                    <div style={{ color: "black", fontWeight: "bold" }}>
                                         What time?
                                     </div>
-                                    <div style={{ marginRight: "1rem", color: "black", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
+                                    <div style={{ marginRight: "1rem", color: "rgb(198, 153, 134)", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
                                         {selectedDate.toLocaleDateString()}
                                     </div>
                                 </div>
+
+                                // <div style={{display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
+                                //     <div style={{ color: "black", fontWeight: "bold" }}>
+                                //         What time?
+                                //     </div>
+                                //     <div style={{ marginRight: "1rem", color: "black", fontWeight: "bold", display: "flex", flexDirection: "row-reverse" }}>
+                                //         {selectedDate.toLocaleDateString()}
+                                //     </div>
+                                // </div>
                             }
 
 

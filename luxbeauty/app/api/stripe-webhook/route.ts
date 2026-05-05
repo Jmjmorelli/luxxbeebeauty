@@ -3,6 +3,9 @@ import Stripe from "stripe";
 import nodemailer from "nodemailer";
 import { useBooking } from "@/app/context/bookingContext";
 import { date } from "drizzle-orm/mysql-core";
+import { appointmentsTable } from "@/app/db/schema";
+import { db } from "@/app/db";
+import { eq } from 'drizzle-orm';
 
 
 
@@ -101,8 +104,8 @@ export async function POST(req: Request) {
       booking_date: formattedDate
     };
 
-    console.log("service ends at this time inside the webhook" + endAt);
-    console.log("notes are: " + customerNotes);
+    // console.log("service ends at this time inside the webhook" + endAt);
+    // console.log("notes are: " + customerNotes);
     try {
       const res = await fetch('https://luxxbeebeauty.com/api/appointments', {
         method: 'POST',
@@ -120,7 +123,7 @@ export async function POST(req: Request) {
       console.log("Success:", data);
 
     } catch (err) {
-      console.log("Error:", err)
+      console.log("Error:", err);
     }
 
 
@@ -223,7 +226,7 @@ export async function POST(req: Request) {
   </table>
 
   <p style="margin-top: 20px;">
-    If you have any questions, please reply to this email.
+    If it looks like something is wrong, it probably is LOL, text me.
   </p>
 
   <p style="font-size: 12px; color: #777; text-align: center; margin-top: 30px;">

@@ -53,12 +53,27 @@ const services = [
     ]
   },
   {
-    category: "Hair",
+    category: "Locs",
     items: [
       { id: "starter-locs", name: "Starter Locs", price: 150, description: "Begin your loc journey", duration: 180 },
       { id: "retwist", name: "Retwist + Style", price: 150, description: "Maintain and style existing locs", duration: 210 },
+      { id: "half-head-locs", name: "Half a Head Locs (Retwist)", price: 100, description: "Maintain existing locs", duration: 90 },
+      { id: "half-head-style", name: "Style ADD ON", price: 20, description: "Style existing locks (half head)", duration: 60 },
+      { id: "flat-top", name: "Flat Top Retwist", price: 80, description: "Style existing locks", duration: 60 },
+    ]
+  },
+  {
+    category: "Hair",
+    items: [
       { id: "flat-iron", name: "Flat Iron", price: 80, description: "Smooth and straighten hair finish", duration: 60 },
       { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30, description: "Cleanse and styled blowout", duration: 30 },]
+  },
+  {
+    category: "Natural Styles",
+    items: [
+      { id: "two-strand-small", name: "Two Strand Small Twists", price: 150, description: "A natural two strand style (Small)", duration: 120 },
+      { id: "two-strand-medium", name: "Two Strand Medium Twists", price: 150, description: "A natural two strand style (Medium)", duration: 120 },
+      { id: "two-strand-large", name: "Two Strand Large Twists", price: 150, description: "A natural two strand style (Large)", duration: 120 },]
   }
 ];
 
@@ -145,7 +160,7 @@ export default function Services() {
                           </p>
                         </div>
 
-                        <div style={{display: "flex", justifyContent: "center", width: "8rem"}}
+                        <div style={{ display: "flex", justifyContent: "center", width: "8rem" }}
                           onClick={() =>
                             exists ? removeFromCart(item.id) : addToCart(item)
                           }
@@ -164,7 +179,7 @@ export default function Services() {
 
 
           <div className={pageCSS.cartContainer}>
-            { exists &&
+            {exists &&
               <h2 className={pageCSS.cartTitle}>Selected Services</h2>
             }
 

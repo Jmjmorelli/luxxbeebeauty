@@ -33,7 +33,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCart((prev) => {
       const updatedCart = [...prev, item];
       sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-      console.log(updatedCart);
+      // console.log(updatedCart);
       return updatedCart;
     });
   };

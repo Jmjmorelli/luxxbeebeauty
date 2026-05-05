@@ -4,6 +4,8 @@ import { eq } from 'drizzle-orm';
 import { appointmentsTable } from "@/app/db/schema";
 import { NextResponse } from "next/server";
 import { json } from "stream/consumers";
+import { useSearchParams } from "next/navigation";
+
 
 
 export async function GET(req: Request) {

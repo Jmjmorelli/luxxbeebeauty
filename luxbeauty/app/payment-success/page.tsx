@@ -6,10 +6,10 @@ import checkmark from "@/app/images/greenCheck.png";
 import { useState } from "react";
 import { useEffect } from "react";
 import { error } from "console";
+import { Suspense } from "react";
 
 
-
-export default function PaymentSuccess() {
+function PaymentSuccessContent() {
     const [bookingConfirmed, setBookingConfirmed] = useState(false);
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
@@ -69,5 +69,14 @@ export default function PaymentSuccess() {
             }
 
         </main>
+
+    );
+}
+
+export default function PaymentSuccess() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <PaymentSuccessContent />
+        </Suspense>
     );
 }

@@ -56,7 +56,8 @@ const services = [
     category: "Locs",
     items: [
       { id: "starter-locs", name: "Starter Locs", price: 150, description: "Begin your loc journey", duration: 180 },
-      { id: "retwist", name: "Retwist + Style", price: 150, description: "Maintain and style existing locs", duration: 210 },
+      { id: "retwist", name: "Retwist ", price: 125, description: "Maintain existing locs", duration: 120 },
+      { id: "style", name: "Style ADD ON", price: 25, description: "Style existing locs", duration: 60 },
       { id: "half-head-locs", name: "Half a Head Locs (Retwist)", price: 100, description: "Maintain existing locs", duration: 90 },
       { id: "half-head-style", name: "Style ADD ON", price: 20, description: "Style existing locks (half head)", duration: 60 },
       { id: "flat-top", name: "Flat Top Retwist", price: 80, description: "Style existing locks", duration: 60 },

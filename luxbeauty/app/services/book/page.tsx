@@ -248,7 +248,7 @@ export default function Book() {
         if (!formattedDate) return false;
 
         // console.log(bookedTimes);
-        return bookedTimes.some((booking) => {
+        return bookedTimes?.some((booking) => {
             const bookingDate = convertToDashFormat(booking.date);
 
             // console.log("booking date in DB: " + bookingDate);

@@ -107,7 +107,8 @@ export async function POST(req: Request) {
     // console.log("service ends at this time inside the webhook" + endAt);
     // console.log("notes are: " + customerNotes);
     try {
-      const res = await fetch('https://luxxbeebeauty.com/api/appointments', {
+      // const res = await fetch('http://localhost:3000/api/appointments', { // uncomment this line when targetting dev
+      const res = await fetch('https://luxxbeebeauty.com/api/appointments', { // comment this line when targetting dev 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +150,7 @@ export async function POST(req: Request) {
     await transporter.sendMail({
       from: `"LuxxBeeBeauty" <${process.env.SMTP_USER}>`,
       to: customerEmail,
-      subject: "[TEST] Appointment Confirmed",
+      subject: "Appointment Confirmed",
       html: `
         <h2>Appointment Confirmed</h2>
         <p>Your booking has been confirmed.</p>
@@ -163,7 +164,7 @@ export async function POST(req: Request) {
       from: `"LuxxBeeBeauty" <${process.env.SMTP_USER}>`,
       // to: "luxxbeebeauty@gmail.com",
       to: "business@luxxbeebeauty.com",
-      subject: "[TEST] You have received a client booking",
+      subject: "You have received a client booking",
       html: `
             <h2>Hi Eyrkah, a client has booked with you please review their details and the following service(s):</h2>
            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222;">

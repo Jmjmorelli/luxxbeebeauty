@@ -65,7 +65,7 @@ export default function Book() {
                 const data = await res.json();
 
                 if (data) {
-                    console.log(JSON.stringify(data));
+                    // console.log(JSON.stringify(data));
                     (true);
                     setBookedTimes(data.data);
                 }

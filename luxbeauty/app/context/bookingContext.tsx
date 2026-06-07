@@ -87,30 +87,6 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             booking_date: bookingDate
         };
 
-        try {
-
-            const res = await fetch('/api/appointments', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newBooking),
-            });
-
-            if (!res.ok) {
-                throw new Error('Failed to create appointment');
-            }
-
-
-            const data = await res.json();
-            console.log("Success:", data);
-
-        } catch (err) {
-            console.log("Error:", err)
-        }
-
-
-
     }
 
 

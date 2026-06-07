@@ -28,7 +28,7 @@ function PaymentSuccessContent() {
                 const data = await res.json();
 
                 if (data) {
-                    console.log(JSON.stringify(data));
+                    // console.log(JSON.stringify(data));
                     (true);
                     setBookingConfirmed(true);
                 }
@@ -53,7 +53,7 @@ function PaymentSuccessContent() {
         // end after 5 seconds
         const timeoutId = setTimeout(() => {
             clearInterval(intervalId);
-            console.log("Stopped looping after 5 seconds.");
+            console.log("timedout.");
         }, 5000);
 
         //  component unmounts 

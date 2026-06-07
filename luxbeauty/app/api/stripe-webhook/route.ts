@@ -112,8 +112,7 @@ console.log("asd");
         throw new Error("Public key invalid");
     }
     try {
-      // const res = await fetch('', { // uncomment this line when targetting dev
-      const res = await fetch(process.env.NEXT_PUBLIC_APPOINTMENT_URL, { // comment this line when targetting dev 
+      const res = await fetch(process.env.NEXT_PUBLIC_APPOINTMENT_URL, {  
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

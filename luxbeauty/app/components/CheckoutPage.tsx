@@ -98,13 +98,11 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
             return;
         }
 
-        // const returnUrl = new URL(`https://luxxbeebeauty.com/payment-success?id=${uniqueBookingID}`); // comment this line when targetting dev 
         
          if (process.env.NEXT_PUBLIC_RETURN_URL == undefined) {
         throw new Error("Public key invalid");
     }
-        const returnUrl = new URL(process.env.NEXT_PUBLIC_RETURN_URL); // uncomment this line when targetting dev 
-        // returnUrl.searchParams.set("id", uniqueBookingID);
+        const returnUrl = new URL(process.env.NEXT_PUBLIC_RETURN_URL + uniqueBookingID);  
 
         const { error } = await stripe.confirmPayment({
             elements,

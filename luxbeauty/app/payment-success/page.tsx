@@ -13,6 +13,7 @@ function PaymentSuccessContent() {
     const [bookingConfirmed, setBookingConfirmed] = useState(false);
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
+    console.log(id);
 
     useEffect(() => {
         async function getBookingStatus() {

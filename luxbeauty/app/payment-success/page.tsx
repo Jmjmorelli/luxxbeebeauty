@@ -15,8 +15,10 @@ function PaymentSuccessContent() {
     const id = searchParams.get("id");
     console.log(id);
 
+
     useEffect(() => {
         async function getBookingStatus() {
+
 
             try {
                 const res = await fetch(`/api/get-booking?id=${id}`);

@@ -49,6 +49,7 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
 
 
     useEffect(() => {
+      
         fetch("/api/payment", {
             method: "POST",
             headers: {
@@ -75,7 +76,7 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
 
 
 
-
+        console.log(uniqueBookingID);
 
     }, [amount, customerEmail, customerNotes]);
 
@@ -99,10 +100,9 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
 
         // if (!process.env.NEXT_PUBLIC_BASE_URL)
         //     return;
-        console.log(uniqueBookingID);
-
-        const returnUrl = new URL(`https://luxxbeebeauty.com/payment-success?id=${uniqueBookingID}`); // comment this line when targetting dev 
-        // const returnUrl = new URL(`http://localhost:3000/payment-success?id=${uniqueBookingID}`); // uncomment this line when targetting dev 
+        // console.log(uniqueBookingID);
+        // const returnUrl = new URL(`https://luxxbeebeauty.com/payment-success?id=${uniqueBookingID}`); // comment this line when targetting dev 
+        const returnUrl = new URL(`http://localhost:3000/payment-success?id=${uniqueBookingID}`); // uncomment this line when targetting dev 
         // returnUrl.searchParams.set("id", uniqueBookingID);
 
         const { error } = await stripe.confirmPayment({
@@ -120,7 +120,7 @@ const CheckoutPage = ({ amount, uniqueBookingID, customerEmail, formattedDate, s
         }
         else if (!error) {
 
-        
+
             // TODO: 
             // The payment UI automatically closes with a success animation.
             // Your customer is redirected to your `return_url`

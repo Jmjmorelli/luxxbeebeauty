@@ -31,21 +31,15 @@ const monthNames = [
 
 const amount = 2000.00; // 2000 cents = 20 dollars lol
 
-async function fetchBookedDates() {
 
-    const res = await fetch("/api/appointments");
-    const data = await res.json();
-
-    // console.log(data.data);
-    // console.log("db pulled");
-
-    return data.data;
-}
 
 
 export default function Book() {
 
+    const uniqueID = crypto.randomUUID();
 
+    // variable used for checking status of form
+    let isFormFilled : boolean = false;
 
     if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY == undefined) {
         throw new Error("Public key invalid");
@@ -60,49 +54,72 @@ export default function Book() {
     let endAt: string = "";
 
     useEffect(() => {
-        async function load() {
-            const data = await fetchBookedDates();
-            setBookedTimes(data);
-            // console.log(data);
+
+        async function fetchBookedDates() {
+            try {
+                const res = await fetch("/api/appointments");
+
+                if (!res.ok) {
+                    throw new Error("Request Failed");
+                }
+                const data = await res.json();
+
+                if (data) {
+                    console.log(JSON.stringify(data));
+                    (true);
+                    setBookedTimes(data.data);
+                }
+                else {
+                    console.log("Data went wrong");
+                    (false);
+                }
+            } catch (err) {
+                console.log("Error: ", err);
+            }
+
+            // console.log(data.data);
+            // console.log("db pulled");
+            // setBookedTimes(data.data);
+            // return data.data;
         }
-        load();
+
+        fetchBookedDates();
 
     }, []);
 
-
-
+    
     //cart logic
     const { cart } = useCart();
     const { addToCart } = useCart();
     const { removeFromCart } = useCart();
     const { clearCart } = useCart();
     const { checkCart } = useCart();
-
-
-
+    
+    
+    
     function calculateEndTimeToString(time: number) {
         const hours = Math.floor(time);
         const minutes = (time % 1) * 60;
-
+        
         const period = hours >= 12 ? "PM" : "AM";
-
+        
         let displayHour = hours % 12;
         if (displayHour === 0) displayHour = 12;
-
+        
         const minuteStr = minutes === 0 ? "00" : minutes.toString();
-
-
+        
+        
         return `${displayHour}:${minuteStr} ${period}`;
     }
     // DETERMINE HOW LONG THE CLIENT SESSION WILL BE FOR BOOKING
-
+    
     const totalMinutes = cart.reduce(
         (sum, item) => sum + item.duration, 0
     );
-
+    
     const totalHours = totalMinutes / 60;
-
-
+    
+    
     useEffect(() => {
         if (selectedTime?.includes("9:00")) {
             setEndTime(calculateEndTimeToString(9 + totalHours));
@@ -128,29 +145,29 @@ export default function Book() {
         else if (selectedTime?.includes("4:00")) {
             setEndTime(calculateEndTimeToString(4 + totalHours));
         }
-
-
+        
+        
         // console.log(totalHours);
         // console.log(totalMinutes);
         // console.log(calculateEndTimeToString(totalHours + 9));
         // console.log(cart);
     }, [selectedTime]);
-
+    
     useEffect(() => {
         setSelectedTime(null);
-
+        
     }, [selectedDate]);
-
+    
     // bookingData vars
-
+    
     // const [uniqueBookingID, setUniqueBookingID] = useState("");
     const [customerName, setCustomerName] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
-    const [customerNotes, setCustomerNotes] = useState("");
+    const [customerNotes, setCustomerNotes] = useState("N/A");
     const [validEmail, setValidEmail] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-
+    
     useEffect(() => {
         function isValidEmail(value: unknown): value is string {
             return (
@@ -158,15 +175,23 @@ export default function Book() {
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
             );
         }
-
+        
         if (isValidEmail(customerEmail))
             setValidEmail(true);
         else
             setValidEmail(false);
-
+        
     }, [customerEmail]);
+    
+    useEffect(() => {
+        if (customerEmail !== '' && customerName !== '' && customerPhone !== '' && customerNotes !== '') // checking to see if these stirngs are eqyal to an empty string literal ( '' )
+        {
+            isFormFilled = true;
+            // console.log("FORM IS FILLED!!");
+        }
 
-
+    }, [customerEmail, customerName, customerPhone, customerNotes]);
+    
     // booking logic
     const { booking } = useBooking();
     const { clearBooking } = useBooking();
@@ -352,7 +377,7 @@ export default function Book() {
                         } */}
                             {
                                 selectedDate &&
-                                <div className={styles.feedForm} style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                <div className={styles.feedForm} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                                     <div style={{ color: "black", fontWeight: "bold" }}>
                                         What time?
                                     </div>
@@ -446,7 +471,7 @@ export default function Book() {
                                         }}
                                     >
                                         <CheckoutPage amount={amount}
-                                            uniqueBookingID={crypto.randomUUID()}
+                                            uniqueBookingID={uniqueID}
                                             customerEmail={customerEmail}
                                             formattedDate={selectedDate.toLocaleDateString()}
                                             selectedTime={selectedTime}

@@ -13,8 +13,7 @@ function PaymentSuccessContent() {
     const [bookingConfirmed, setBookingConfirmed] = useState(false);
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
-    console.log(id);
-
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
         async function getBookingStatus() {
@@ -44,9 +43,25 @@ function PaymentSuccessContent() {
 
         }
 
-        getBookingStatus();
+       // i think it makese sense to leave it check for only 5 seconds, and then time out.. maybe 30 secondfs couild be good too
+        const intervalId = setInterval(() => {
+            setCount((prevCount) => prevCount + 1);
+            // console.log(" looping...");
+            getBookingStatus();
+        }, 1000);
 
-    }, []);
+        // end after 5 seconds
+        const timeoutId = setTimeout(() => {
+            clearInterval(intervalId);
+            console.log("Stopped looping after 5 seconds.");
+        }, 5000);
+
+        //  component unmounts 
+        return () => {
+            clearInterval(intervalId);
+            clearTimeout(timeoutId);
+        };
+    }, []); 
 
     return (
 

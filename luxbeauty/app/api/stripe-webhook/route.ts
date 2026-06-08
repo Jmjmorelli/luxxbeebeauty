@@ -5,7 +5,7 @@ import { useBooking } from "@/app/context/bookingContext";
 import { date } from "drizzle-orm/mysql-core";
 import { appointmentsTable } from "@/app/db/schema";
 import { db } from "@/app/db";
-import { eq } from 'drizzle-orm';
+import { ConsoleLogWriter, eq } from 'drizzle-orm';
 
 
 
@@ -23,7 +23,7 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-
+console.log("asd");
 
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
@@ -106,9 +106,13 @@ export async function POST(req: Request) {
 
     // console.log("service ends at this time inside the webhook" + endAt);
     // console.log("notes are: " + customerNotes);
+    console.log(uniqueBookingID + "setting URL");
+
+      if (process.env.NEXT_PUBLIC_APPOINTMENT_URL == undefined) {
+        throw new Error("Public key invalid");
+    }
     try {
-      // const res = await fetch('http://localhost:3000/api/appointments', { // uncomment this line when targetting dev
-      const res = await fetch('https://luxxbeebeauty.com/api/appointments', { // comment this line when targetting dev 
+      const res = await fetch(process.env.NEXT_PUBLIC_APPOINTMENT_URL, {  
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

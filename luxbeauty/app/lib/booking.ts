@@ -1,0 +1,1 @@
+export const BOOKING_FEE_CENTS = 2000;

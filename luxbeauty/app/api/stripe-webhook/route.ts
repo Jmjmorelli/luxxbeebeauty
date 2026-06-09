@@ -6,9 +6,9 @@ import { date } from "drizzle-orm/mysql-core";
 import { appointmentsTable } from "@/app/db/schema";
 import { db } from "@/app/db";
 import { ConsoleLogWriter, eq } from 'drizzle-orm';
-
-
-
+import { BOOKING_FEE_CENTS } from "@/app/lib/booking";
+import { escape } from "querystring";
+import { escapeHtml } from "@/app/lib/escapeHtml";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.hostinger.com",
@@ -23,7 +23,7 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-console.log("asd");
+  console.log("asd");
 
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
@@ -42,7 +42,6 @@ console.log("asd");
     created_at: number;
     booking_date: string;
   }
-
 
   if (!signature) {
     return NextResponse.json(
@@ -71,6 +70,11 @@ console.log("asd");
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
+    if (paymentIntent.amount_received !== BOOKING_FEE_CENTS || paymentIntent.currency !== "usd"){
+      console.warn(`Rjected booking ${paymentIntent.metadata?.uniqueBookingID}:` + `paid ${paymentIntent.amount_received} ${paymentIntent.currency}`);
+      return NextResponse.json({ received: true }); 
+    }
+
     const {
       uniqueBookingID,
       customerName,
@@ -87,6 +91,13 @@ console.log("asd");
 
     } = paymentIntent.metadata;
 
+    const safe = {
+      customerName: escapeHtml(customerName),
+      customerNotes: escapeHtml(customerNotes),
+      selectedTime: escapeHtml(selectedTime),
+      formattedDate: escapeHtml(formattedDate),
+      uniqueBookingID: escapeHtml(uniqueBookingID),
+    }
 
     const createdAt = Date.now();
     const newBooking: BookingData = {
@@ -108,35 +119,17 @@ console.log("asd");
     // console.log("notes are: " + customerNotes);
     console.log(uniqueBookingID + "setting URL");
 
-      if (process.env.NEXT_PUBLIC_APPOINTMENT_URL == undefined) {
-        throw new Error("Public key invalid");
-    }
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_APPOINTMENT_URL, {  
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newBooking),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to create appointment');
-      }
-
-      const data = await res.json();
-      console.log("Success:", data);
-
+      await db.insert(appointmentsTable).values(newBooking);
+      console.log("Booking inserted:", uniqueBookingID);
     } catch (err) {
-      console.log("Error:", err);
+      console.log("Error inserting booking:", err);
     }
-
 
     // Initiate booking creation time and unique booking ID 
     // note to self
     // instead of calling it the bookingcontext logic, i just moved it over here instead bcause accessing the bookingcontext (client) from here is not allowed (server)
     // addBooking(uniqueBookingID, customerName, customerPhone, customerEmail, listServices, selectedTime, endAt, bookingStatus, appointmentNotes, customerNotes, createdAt, formattedDate);
-
 
     const services = JSON.parse(listServices);
 
@@ -144,12 +137,11 @@ console.log("asd");
       .map((service: any) => {
         return `
       <div>
-        <strong>${service.name}</strong> (${service.duration} mins)
+        <strong>${escapeHtml(service.name)}</strong> (${escapeHtml(service.duration)} mins)
       </div>
     `;
       })
       .join("");
-
 
     await transporter.sendMail({
       from: `"LuxxBeeBeauty" <${process.env.SMTP_USER}>`,
@@ -158,9 +150,9 @@ console.log("asd");
       html: `
         <h2>Appointment Confirmed</h2>
         <p>Your booking has been confirmed.</p>
-        <p><strong>Date:</strong> ${formattedDate}</p>
-        <p><strong>Time:</strong> ${selectedTime}</p>
-        <p><strong>Booking ID:</strong> ${uniqueBookingID}</p>
+        <p><strong>Date:</strong> ${safe.formattedDate}</p>
+        <p><strong>Time:</strong> ${safe.selectedTime}</p>
+        <p><strong>Booking ID:</strong> ${safe.uniqueBookingID}</p>
       `,
     });
 
@@ -171,75 +163,74 @@ console.log("asd");
       subject: "You have received a client booking",
       html: `
             <h2>Hi Eyrkah, a client has booked with you please review their details and the following service(s):</h2>
-           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222;">
-            <h2 style="text-align: center; color: #111;">Appointment Confirmed</h2>
-    <p>Thank you for booking with LuxxBeeBeauty! Here are your appointment details:</p>
-  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
-        Booking ID
-      </td>
-      <td style="border: 1px solid #ddd; padding: 12px;">
-        ${uniqueBookingID}
-      </td>
-    </tr>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222;">
+              <h2 style="text-align: center; color: #111;">Appointment Confirmed</h2>
+              <p>Thank you for booking with LuxxBeeBeauty! Here are your appointment details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+                    Booking ID
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 12px;">
+                    ${safe.uniqueBookingID}
+                  </td>
+                </tr>
 
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
-        Date
-      </td>
-      <td style="border: 1px solid #ddd; padding: 12px;">
-        ${formattedDate}
-      </td>
-    </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+                    Date
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 12px;">
+                    ${safe.formattedDate}
+                  </td>
+                </tr>
 
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
-        Time
-      </td>
-      <td style="border: 1px solid #ddd; padding: 12px;">
-        ${selectedTime}
-      </td>
-    </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+                    Time
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 12px;">
+                    ${safe.selectedTime}
+                  </td>
+                </tr>
 
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
-        Service(s) 
-      </td>
-      <td style="border: 1px solid #ddd; padding: 12px;">
-        ${servicesHTML}
-      </td>
-    </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+                    Service(s) 
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 12px;">
+                    ${servicesHTML}
+                  </td>
+                </tr>
 
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
-        Status
-      </td>
-      <td style="border: 1px solid #ddd; padding: 12px;">
-        Confirmed
-      </td>
-    </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+                    Status
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 12px;">
+                    Confirmed
+                  </td>
+                </tr>
 
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
-        Customer Notes/Requests
-      </td>
-      <td style="border: 1px solid #ddd; padding: 12px;">
-        ${customerNotes}
-      </td>
-    </tr>
-  </table>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold; background: #f7f7f7;">
+                    Customer Notes/Requests
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 12px;">
+                    ${safe.customerNotes}
+                  </td>
+                </tr>
+              </table>
 
-  <p style="margin-top: 20px;">
-    If it looks like something is wrong, it probably is LOL, text me.
-  </p>
+              <p style="margin-top: 20px;">
+                If it looks like something is wrong, it probably is LOL, text me.
+              </p>
 
-  <p style="font-size: 12px; color: #777; text-align: center; margin-top: 30px;">
-    LuxxBeeBeauty
-  </p>
-</div>`
+              <p style="font-size: 12px; color: #777; text-align: center; margin-top: 30px;">
+                LuxxBeeBeauty
+              </p>
+            </div>`
     });
-
   }
 
   return NextResponse.json({ received: true });

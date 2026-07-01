@@ -67,7 +67,9 @@ const services = [
     category: "Hair",
     items: [
       { id: "flat-iron", name: "Flat Iron", price: 80, description: "Smooth and straighten hair finish", duration: 60 },
-      { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30, description: "Cleanse and styled blowout", duration: 30 },]
+      { id: "shampoo-blowdry", name: "Shampoo and Blow Dry", price: 30, description: "Cleanse and styled blowout", duration: 30 },
+      { id: "deep-conditioning", name: "Deep Conditioning", price: 20, description: "Deep Conditioning", duration: 30 },
+    ]
   },
   {
     category: "Natural Styles",

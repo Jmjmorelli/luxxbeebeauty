@@ -293,14 +293,15 @@ export default function Book() {
         });
     }
 
+    // Availability days
     function isTodayAvailable(day: Date | null) {
         if (!day) return false;
-        if (day.getDay() == 0) {
+        if (day.getDay() == 2) {
             return false;
         }
-        else if (day.getDay() == 1) {
-            return false;
-        }
+        // else if (day.getDay() == 1) {
+        //     return false;
+        // }
 
         return true;
     }
